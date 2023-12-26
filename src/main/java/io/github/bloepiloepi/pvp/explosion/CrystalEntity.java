@@ -3,6 +3,7 @@ package io.github.bloepiloepi.pvp.explosion;
 import io.github.bloepiloepi.pvp.damage.CustomDamageType;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.LivingEntity;
+import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.other.EndCrystalMeta;
 import net.minestom.server.instance.block.Block;
@@ -36,13 +37,9 @@ public class CrystalEntity extends LivingEntity {
 		if (isInvulnerable() || isImmune(type)) {
 			return false;
 		}
-		
-		// Set the last damage type since the event is not cancelled
-		this.lastDamageSource = type;
-		
+
 		remove();
-		if (instance.getExplosionSupplier() != null
-				&& (!(type instanceof CustomDamageType damageType) || !damageType.isExplosive())) {
+		if (instance.getExplosionSupplier() != null) {
 			instance.explode((float) position.x(), (float) position.y(), (float) position.z(), 6.0f);
 		}
 		

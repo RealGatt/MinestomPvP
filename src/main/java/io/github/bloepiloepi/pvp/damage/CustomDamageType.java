@@ -14,33 +14,33 @@ import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class CustomDamageType extends DamageType {
-	public static final CustomDamageType IN_FIRE = (new CustomDamageType("inFire")).setBypassesArmor().setFire();
-	public static final CustomDamageType LIGHTNING_BOLT = new CustomDamageType("lightningBolt");
-	public static final CustomDamageType ON_FIRE = (new CustomDamageType("onFire")).setBypassesArmor().setFire();
-	public static final CustomDamageType LAVA = (new CustomDamageType("lava")).setFire();
-	public static final CustomDamageType HOT_FLOOR = (new CustomDamageType("hotFloor")).setFire();
-	public static final CustomDamageType IN_WALL = (new CustomDamageType("inWall")).setBypassesArmor();
-	public static final CustomDamageType CRAMMING = (new CustomDamageType("cramming")).setBypassesArmor();
-	public static final CustomDamageType DROWN = (new CustomDamageType("drown")).setBypassesArmor();
-	public static final CustomDamageType STARVE = (new CustomDamageType("starve")).setBypassesArmor().setUnblockable();
-	public static final CustomDamageType CACTUS = new CustomDamageType("cactus");
-	public static final CustomDamageType FALL = (new CustomDamageType("fall")).setBypassesArmor().setFall();
-	public static final CustomDamageType ENDER_PEARL = (new CustomDamageType("fall")).setBypassesArmor().setFall();
-	public static final CustomDamageType FLY_INTO_WALL = (new CustomDamageType("flyIntoWall")).setBypassesArmor();
-	public static final CustomDamageType OUT_OF_WORLD = (new CustomDamageType("outOfWorld")).setBypassesArmor().setOutOfWorld();
-	public static final CustomDamageType GENERIC = (new CustomDamageType("generic")).setBypassesArmor();
-	public static final CustomDamageType MAGIC = (new CustomDamageType("magic")).setBypassesArmor().setMagic();
-	public static final CustomDamageType WITHER = (new CustomDamageType("wither")).setBypassesArmor();
-	public static final CustomDamageType ANVIL = new CustomDamageType("anvil").setDamagesHelmet();
-	public static final CustomDamageType FALLING_BLOCK = new CustomDamageType("fallingBlock").setDamagesHelmet();
-	public static final CustomDamageType DRAGON_BREATH = (new CustomDamageType("dragonBreath")).setBypassesArmor();
-	public static final CustomDamageType DRYOUT = new CustomDamageType("dryout");
-	public static final CustomDamageType SWEET_BERRY_BUSH = new CustomDamageType("sweetBerryBush");
-	public static final CustomDamageType FREEZE = new CustomDamageType("freeze").setBypassesArmor();
-	public static final CustomDamageType FALLING_STALACTITE = new CustomDamageType("fallingStalactite").setDamagesHelmet();
-	public static final CustomDamageType STALAGMITE = new CustomDamageType("stalagmite").setBypassesArmor().setFall();
-	
+public class CustomDamageType {
+	public static final CustomDamageType IN_FIRE = (new CustomDamageType(DamageType.IN_FIRE, "inFire")).setBypassesArmor().setFire();
+	public static final CustomDamageType LIGHTNING_BOLT = new CustomDamageType(DamageType.LIGHTNING_BOLT, "lightningBolt");
+	public static final CustomDamageType ON_FIRE = (new CustomDamageType(DamageType.ON_FIRE, "onFire")).setBypassesArmor().setFire();
+	public static final CustomDamageType LAVA = (new CustomDamageType(DamageType.LAVA, "lava")).setFire();
+	public static final CustomDamageType HOT_FLOOR = (new CustomDamageType(DamageType.HOT_FLOOR, "hotFloor")).setFire();
+	public static final CustomDamageType IN_WALL = (new CustomDamageType(DamageType.IN_WALL, "inWall")).setBypassesArmor();
+	public static final CustomDamageType CRAMMING = (new CustomDamageType(DamageType.CRAMMING, "cramming")).setBypassesArmor();
+	public static final CustomDamageType DROWN = (new CustomDamageType(DamageType.DROWN, "drown")).setBypassesArmor();
+	public static final CustomDamageType STARVE = (new CustomDamageType(DamageType.STARVE, "starve")).setBypassesArmor().setUnblockable();
+	public static final CustomDamageType CACTUS = new CustomDamageType(DamageType.CACTUS, "cactus");
+	public static final CustomDamageType FALL = (new CustomDamageType(DamageType.FALL, "fall")).setBypassesArmor().setFall();
+	public static final CustomDamageType ENDER_PEARL = (new CustomDamageType(DamageType.FALL, "fall")).setBypassesArmor().setFall();
+	public static final CustomDamageType FLY_INTO_WALL = (new CustomDamageType(DamageType.FLY_INTO_WALL, "flyIntoWall")).setBypassesArmor();
+	public static final CustomDamageType OUT_OF_WORLD = (new CustomDamageType(DamageType.OUT_OF_WORLD, "outOfWorld")).setBypassesArmor().setOutOfWorld();
+	public static final CustomDamageType GENERIC = (new CustomDamageType(DamageType.GENERIC, "generic")).setBypassesArmor();
+	public static final CustomDamageType MAGIC = (new CustomDamageType(DamageType.MAGIC, "magic")).setBypassesArmor().setMagic();
+	public static final CustomDamageType WITHER = (new CustomDamageType(DamageType.WITHER, "wither")).setBypassesArmor();
+	public static final CustomDamageType ANVIL = new CustomDamageType(DamageType.FALLING_ANVIL, "anvil").setDamagesHelmet();
+	public static final CustomDamageType FALLING_BLOCK = new CustomDamageType(DamageType.FALLING_BLOCK, "fallingBlock").setDamagesHelmet();
+	public static final CustomDamageType DRAGON_BREATH = (new CustomDamageType(DamageType.DRAGON_BREATH, "dragonBreath")).setBypassesArmor();
+	public static final CustomDamageType DRYOUT = new CustomDamageType(DamageType.DRY_OUT, "dryout");
+	public static final CustomDamageType SWEET_BERRY_BUSH = new CustomDamageType(DamageType.SWEET_BERRY_BUSH, "sweetBerryBush");
+	public static final CustomDamageType FREEZE = new CustomDamageType(DamageType.FREEZE, "freeze").setBypassesArmor();
+	public static final CustomDamageType FALLING_STALACTITE = new CustomDamageType(DamageType.FALLING_STALACTITE, "fallingStalactite").setDamagesHelmet();
+	public static final CustomDamageType STALAGMITE = new CustomDamageType(DamageType.STALAGMITE, "stalagmite").setBypassesArmor().setFall();
+
 	private boolean damagesHelmet;
 	private boolean bypassesArmor;
 	private boolean outOfWorld;
@@ -53,58 +53,59 @@ public class CustomDamageType extends DamageType {
 	private boolean explosive;
 	private boolean fall;
 	public final String name;
+	public DamageType originDamageType;
 	
-	protected CustomDamageType(String name) {
-		super(name);
+	protected CustomDamageType(DamageType originDamageType, String name) {
 		this.name = name;
+		this.originDamageType = originDamageType;
 	}
 	
 	public static CustomDamageType sting(LivingEntity attacker) {
-		return new CustomEntityDamage("sting", attacker);
+		return new CustomEntityDamage(DamageType.STING, "sting", attacker);
 	}
 	
 	public static CustomDamageType mob(LivingEntity attacker) {
-		return new CustomEntityDamage("mob", attacker);
+		return new CustomEntityDamage(DamageType.MOB_ATTACK,"mob", attacker);
 	}
 	
 	public static CustomDamageType indirectMob(Entity projectile, Entity attacker) {
-		return new CustomIndirectEntityDamage("mob", attacker, projectile);
+		return new CustomIndirectEntityDamage(DamageType.MOB_ATTACK, "mob", attacker, projectile);
 	}
 	
 	public static CustomDamageType player(Player player) {
-		return new CustomEntityDamage("player", player);
+		return new CustomEntityDamage(DamageType.PLAYER_ATTACK,"player", player);
 	}
 	
 	public static CustomDamageType arrow(Entity arrow, @Nullable Entity shooter) {
-		return new CustomIndirectEntityDamage("arrow", arrow, shooter).setProjectile();
+		return new CustomIndirectEntityDamage(DamageType.ARROW, "arrow", arrow, shooter).setProjectile();
 	}
 	
 	public static CustomDamageType trident(Entity trident, @Nullable Entity thrower) {
-		return new CustomIndirectEntityDamage("trident", trident, thrower);
+		return new CustomIndirectEntityDamage(DamageType.TRIDENT, "trident", trident, thrower);
 	}
 	
 	public static CustomDamageType fireworks(Entity rocket, @Nullable Entity owner) {
-		return new CustomIndirectEntityDamage("fireworks", rocket, owner);
+		return new CustomIndirectEntityDamage(DamageType.FIREWORKS, "fireworks", rocket, owner);
 	}
 	
 	public static CustomDamageType fireball(Entity fireball, @Nullable Entity shooter) {
-		return (shooter == null ? new CustomIndirectEntityDamage("onFire", fireball, fireball) : new CustomIndirectEntityDamage("fireball", fireball, shooter)).setFire().setProjectile();
+		return (shooter == null ? new CustomIndirectEntityDamage(DamageType.ON_FIRE, "onFire", fireball, fireball) : new CustomIndirectEntityDamage(DamageType.FIREBALL, "fireball", fireball, shooter)).setFire().setProjectile();
 	}
 	
 	public static CustomDamageType witherSkull(Entity witherSkull, Entity shooter) {
-		return new CustomIndirectEntityDamage("witherSkull", witherSkull, shooter).setProjectile();
+		return new CustomIndirectEntityDamage(DamageType.WITHER_SKULL, "witherSkull", witherSkull, shooter).setProjectile();
 	}
 	
 	public static CustomDamageType thrown(Entity thrown, @Nullable Entity thrower) {
-		return new CustomIndirectEntityDamage("thrown", thrown, thrower).setProjectile();
+		return new CustomIndirectEntityDamage(DamageType.THROWN, "thrown", thrown, thrower).setProjectile();
 	}
 	
 	public static CustomDamageType indirectMagic(Entity magic, @Nullable Entity owner) {
-		return new CustomIndirectEntityDamage("indirectMagic", magic, owner).setBypassesArmor().setMagic();
+		return new CustomIndirectEntityDamage(DamageType.INDIRECT_MAGIC, "indirectMagic", magic, owner).setBypassesArmor().setMagic();
 	}
 	
 	public static CustomDamageType thorns(Entity wearer) {
-		return new CustomEntityDamage("thorns", wearer).setThorns().setMagic();
+		return new CustomEntityDamage(DamageType.THORNS, "thorns", wearer).setThorns().setMagic();
 	}
 	
 	public static CustomDamageType explosion(@Nullable Explosion explosion, @Nullable LivingEntity causingEntity) {
@@ -112,7 +113,7 @@ public class CustomDamageType extends DamageType {
 	}
 	
 	public static CustomDamageType explosion(@Nullable LivingEntity causingEntity) {
-		return (causingEntity != null ? new CustomEntityDamage("explosion.player", causingEntity) : new CustomDamageType("explosion")).setScaledWithDifficulty().setExplosive();
+		return (causingEntity != null ? new CustomEntityDamage(DamageType.PLAYER_EXPLOSION,"explosion.player", causingEntity) : new CustomDamageType(DamageType.EXPLOSION, "explosion")).setScaledWithDifficulty().setExplosive();
 	}
 	
 	public static CustomDamageType invalidRespawnPointExplosion() {
@@ -195,7 +196,7 @@ public class CustomDamageType extends DamageType {
 	}
 	
 	public @Nullable Component getDeathMessage(@NotNull Player killed) {
-		String id = "death.attack." + getIdentifier();
+		String id = "death.attack." + originDamageType.registry().messageId();
 		LivingEntity killer = getKillCredit(killed);
 		if (killer == null) {
 			return Component.translatable(id, EntityUtils.getName(killed));
@@ -204,13 +205,11 @@ public class CustomDamageType extends DamageType {
 					EntityUtils.getName(killer));
 		}
 	}
-	
-	@Override
+
 	public @Nullable Component buildDeathMessage(@NotNull Player killed) {
 		return Tracker.combatManager.get(killed.getUuid()).getDeathMessage();
 	}
-	
-	@Override
+
 	public Component buildDeathScreenText(@NotNull Player killed) {
 		return buildDeathMessage(killed);
 	}
@@ -261,13 +260,16 @@ public class CustomDamageType extends DamageType {
 	}
 	
 	@Nullable
-	@Override
 	public SoundEvent getSound(@NotNull LivingEntity entity) {
 		//TODO
 		if (this.isFire() && entity instanceof Player) {
 			return SoundEvent.ENTITY_PLAYER_HURT_ON_FIRE;
 		} else {
-			return super.getSound(entity);
+			if (entity instanceof Player) {
+				return SoundEvent.ENTITY_PLAYER_HURT;
+			} else {
+				return SoundEvent.ENTITY_GENERIC_HURT;
+			}
 		}
 	}
 	

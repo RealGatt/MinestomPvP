@@ -83,7 +83,7 @@ public class ThrownTrident extends AbstractArrow {
 		
 		float damage = 8.0f + EnchantmentUtils.getAttackDamage(tridentItem, EntityGroup.ofEntity(living), legacy);
 		CustomDamageType damageType = CustomDamageType.trident(this, shooter == null ? this : shooter);
-		if (living.damage(damageType, damage) && shooter instanceof LivingEntity livingShooter) {
+		if (living.damage(damageType.originDamageType, damage) && shooter instanceof LivingEntity livingShooter) {
 			EnchantmentUtils.onUserDamaged(living, livingShooter);
 			EnchantmentUtils.onTargetDamaged(livingShooter, living);
 		}

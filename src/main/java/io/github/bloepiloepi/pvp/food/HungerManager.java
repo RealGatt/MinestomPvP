@@ -67,7 +67,7 @@ public class HungerManager {
 				if (starvationTicks >= 80) {
 					if (player.getHealth() > 10 || difficulty == Difficulty.HARD
 							|| ((player.getHealth() > 1) && (difficulty == Difficulty.NORMAL))) {
-						player.damage(CustomDamageType.STARVE, 1);
+						player.damage(CustomDamageType.STARVE.originDamageType, 1);
 					}
 					
 					starvationTicks = 0;

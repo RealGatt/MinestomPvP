@@ -91,7 +91,7 @@ public class FishingBobber extends CustomEntityProjectile {
 			
 			Pos posNow = this.position;
 			this.position = prevPos;
-			if (EntityUtils.damage(entity, CustomDamageType.GENERIC, 0)) {
+			if (EntityUtils.damage(entity, CustomDamageType.GENERIC.originDamageType, 0)) {
 				entity.setVelocity(calculateLegacyKnockback(entity.getVelocity(), entity.getPosition()));
 			}
 			this.position = posNow;

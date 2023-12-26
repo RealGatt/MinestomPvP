@@ -4,13 +4,14 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.damage.DamageType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class InvalidRespawnPointDamageType extends CustomDamageType {
 	
 	public InvalidRespawnPointDamageType() {
-		super("badRespawnPoint");
+		super(DamageType.BAD_RESPAWN_POINT, "badRespawnPoint");
 		
 		this.setScaledWithDifficulty();
 		this.setExplosive();

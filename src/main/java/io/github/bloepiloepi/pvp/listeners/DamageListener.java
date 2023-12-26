@@ -41,6 +41,7 @@ import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class DamageListener {
@@ -263,7 +264,7 @@ public class DamageListener {
 		event.setAnimation(false);
 		event.setSound(null);
 		
-		float amount = event.getDamage();
+		float amount = event.getDamage().getAmount();
 		CustomDamageType type = getCustomDamageType(event);
 		if (event.getEntity() instanceof Player && type.isScaledWithDifficulty())
 			amount = scaleWithDifficulty(amount);
@@ -372,10 +373,16 @@ public class DamageListener {
 		}
 		
 		// Play sound (copied from Minestom, because of complications with cancelling)
-		if (config.isSoundsEnabled() && sound != null) entity.sendPacketToViewersAndSelf(new SoundEffectPacket(
-				sound, entity instanceof Player ? Sound.Source.PLAYER : Sound.Source.HOSTILE,
+		if (config.isSoundsEnabled() && sound != null)
+
+			entity.sendPacketToViewersAndSelf(new SoundEffectPacket(
+				sound,
+				1.0f,
+				entity instanceof Player ? Sound.Source.PLAYER : Sound.Source.HOSTILE,
 				entity.getPosition(),
-				1.0f, 1.0f
+				1.0f,
+				1.0f,
+				0L
 		));
 		
 		if (death && !event.isCancelled()) {
@@ -392,7 +399,7 @@ public class DamageListener {
 				event.setCancelled(true);
 				damageManually(entity, amount);
 			} else {
-				event.setDamage(amount);
+				event.getDamage().setAmount(amount);
 			}
 		} else {
 			event.setCancelled(true);

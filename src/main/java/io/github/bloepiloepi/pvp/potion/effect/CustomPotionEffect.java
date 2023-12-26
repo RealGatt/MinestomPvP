@@ -59,11 +59,11 @@ public class CustomPotionEffect {
 			return;
 		} else if (potionEffect == PotionEffect.POISON) {
 			if (entity.getHealth() > 1.0F) {
-				entity.damage(CustomDamageType.MAGIC, 1.0F);
+				entity.damage(CustomDamageType.MAGIC.originDamageType, 1.0F);
 			}
 			return;
 		} else if (potionEffect == PotionEffect.WITHER) {
-			entity.damage(CustomDamageType.WITHER, 1.0F);
+			entity.damage(CustomDamageType.WITHER.originDamageType, 1.0F);
 			return;
 		}
 		
@@ -83,7 +83,7 @@ public class CustomPotionEffect {
 			if (shouldHeal(entityGroup)) {
 				entity.setHealth(entity.getHealth() + (float) Math.max(4 << amplifier, 0));
 			} else {
-				entity.damage(CustomDamageType.MAGIC, (float) (6 << amplifier));
+				entity.damage(CustomDamageType.MAGIC.originDamageType, (float) (6 << amplifier));
 			}
 		}
 	}
@@ -102,9 +102,9 @@ public class CustomPotionEffect {
 		} else {
 			int amount = (int) (proximity * (double) (6 << amplifier) + 0.5D);
 			if (source == null) {
-				target.damage(CustomDamageType.MAGIC, (float) amount);
+				target.damage(CustomDamageType.MAGIC.originDamageType, (float) amount);
 			} else {
-				target.damage(CustomDamageType.indirectMagic(source, attacker), (float) amount);
+				target.damage(CustomDamageType.indirectMagic(source, attacker).originDamageType, (float) amount);
 			}
 		}
 	}

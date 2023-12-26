@@ -26,7 +26,7 @@ public class ThornsEnchantment extends CustomEnchantment {
 				EnchantmentUtils.chooseEquipmentWith(this, user, (stack) -> true);
 		
 		if (attacker != null) {
-			attacker.damage(CustomDamageType.thorns(user), getDamageAmount(level, random));
+			attacker.damage(CustomDamageType.thorns(user).originDamageType, getDamageAmount(level, random));
 		}
 		
 		if (entry != null) {

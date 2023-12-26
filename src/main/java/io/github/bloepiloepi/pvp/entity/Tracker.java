@@ -53,7 +53,7 @@ public class Tracker {
 			if (cooldownMap.isEmpty()) return;
 			
 			Iterator<Map.Entry<Material, Long>> iterator = cooldownMap.entrySet().iterator();
-			Player player = MinecraftServer.getConnectionManager().getPlayer(uuid);
+			Player player = MinecraftServer.getConnectionManager().getOnlinePlayerByUuid(uuid);
 			assert player != null;
 			
 			while (iterator.hasNext()) {

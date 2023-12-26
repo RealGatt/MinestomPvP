@@ -9,12 +9,9 @@ group 'io.github.bloepiloepi'
 version '1.0'
 
 repositories {
+    mavenLocal()
     mavenCentral()
-
-    maven { url 'https://repo.spongepowered.org/maven' }
-    maven { url 'https://repo.velocitypowered.com/snapshots/' }
     maven { url 'https://jitpack.io' }
-    maven { url 'https://repo.minestom.net/repository/maven-public/' }
 }
 
 java {
@@ -23,8 +20,9 @@ java {
 }
 
 dependencies {
-    compileOnly 'com.github.Minestom.Minestom:Minestom:aebf72de90'
-    testImplementation 'com.github.Minestom.Minestom:Minestom:aebf72de90'
+    compileOnly 'dev.hollowcube:minestom-ce:gatt'
+    implementation 'dev.hollowcube:minestom-ce:gatt'
+    testImplementation 'dev.hollowcube:minestom-ce:gatt'
     testImplementation 'com.github.TogAr2:MinestomFluids:b237b13a4b'
 }
 
@@ -33,5 +31,8 @@ publishing {
         mavenJava(MavenPublication) {
             from components.java
         }
+    }
+    repositories {
+        mavenLocal()
     }
 }

@@ -136,7 +136,7 @@ public class AttackManager {
 		
 		boolean damageSucceeded = EntityUtils.damage(
 				target, attacker instanceof Player player ?
-						CustomDamageType.player(player) : CustomDamageType.mob(attacker),
+						CustomDamageType.player(player).originDamageType : CustomDamageType.mob(attacker).originDamageType,
 				attack.damage()
 		);
 		
@@ -410,7 +410,7 @@ public class AttackManager {
 				));
 				living.damage(
 						attacker instanceof Player player ?
-								CustomDamageType.player(player) : CustomDamageType.mob(attacker),
+								CustomDamageType.player(player).originDamageType : CustomDamageType.mob(attacker).originDamageType,
 						sweepingDamage
 				);
 			}

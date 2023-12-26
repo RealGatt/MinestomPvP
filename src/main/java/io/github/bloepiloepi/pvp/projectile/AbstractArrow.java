@@ -141,7 +141,7 @@ public abstract class AbstractArrow extends CustomEntityProjectile {
 		
 		Entity shooter = getShooter();
 		DamageType damageType;
-		damageType = CustomDamageType.arrow(this, Objects.requireNonNullElse(shooter, this));
+		damageType = CustomDamageType.arrow(this, Objects.requireNonNullElse(shooter, this)).originDamageType;
 		
 		if (EntityUtils.damage(entity, damageType, damage)) {
 			if (entity.getEntityType() == EntityType.ENDERMAN) return;

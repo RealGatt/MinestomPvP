@@ -78,7 +78,7 @@ public class FallDamageHandler {
 					));
 				}
 				
-				entity.damage(CustomDamageType.FALL, damage);
+				entity.damage(CustomDamageType.FALL.originDamageType, damage);
 			}
 		} else if (dy < 0) {
 			entity.setTag(Tracker.FALL_DISTANCE, fallDistance - dy);

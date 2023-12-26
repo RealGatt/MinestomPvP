@@ -5,6 +5,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,8 +13,8 @@ import org.jetbrains.annotations.Nullable;
 public class CustomIndirectEntityDamage extends CustomEntityDamage {
 	private final @Nullable Entity owner;
 	
-	public CustomIndirectEntityDamage(String name, @NotNull Entity projectile, @Nullable Entity owner) {
-		super(name, projectile);
+	public CustomIndirectEntityDamage(DamageType origintype, String name, @NotNull Entity projectile, @Nullable Entity owner) {
+		super(origintype, name, projectile);
 		this.owner = owner;
 	}
 	
@@ -38,7 +39,7 @@ public class CustomIndirectEntityDamage extends CustomEntityDamage {
 	public @Nullable Component getDeathMessage(@NotNull Player killed) {
 		Component ownerName = owner == null ? EntityUtils.getName(entity) : EntityUtils.getName(owner);
 		ItemStack weapon = entity instanceof LivingEntity ? ((LivingEntity) entity).getItemInMainHand() : ItemStack.AIR;
-		String id = "death.attack." + getIdentifier();
+		String id = "death.attack." + originDamageType.messageId();
 		if (!weapon.isAir() && weapon.getDisplayName() != null) {
 			return Component.translatable(id + ".item", EntityUtils.getName(killed), ownerName, weapon.getDisplayName());
 		} else {

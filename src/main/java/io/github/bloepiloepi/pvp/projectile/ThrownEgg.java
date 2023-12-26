@@ -19,7 +19,7 @@ public class ThrownEgg extends CustomEntityProjectile implements ItemHoldingProj
 	public void onHit(Entity entity) {
 		triggerStatus((byte) 3); // Egg particles
 		
-		EntityUtils.damage(entity, CustomDamageType.thrown(this, getShooter()), 0.0F);
+		EntityUtils.damage(entity, CustomDamageType.thrown(this, getShooter()).originDamageType, 0.0F);
 		
 		remove();
 	}

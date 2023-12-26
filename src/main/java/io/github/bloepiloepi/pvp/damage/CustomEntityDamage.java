@@ -6,6 +6,7 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,8 +15,11 @@ public class CustomEntityDamage extends CustomDamageType {
 	protected final Entity entity;
 	private boolean thorns;
 	
-	public CustomEntityDamage(String name, Entity entity) {
-		super(name);
+	public CustomEntityDamage(DamageType originDamage, String name, Entity entity) {
+		super(
+				originDamage,
+				name
+		);
 		this.entity = entity;
 	}
 	
@@ -37,7 +41,7 @@ public class CustomEntityDamage extends CustomDamageType {
 	@Override
 	public @Nullable Component getDeathMessage(@NotNull Player killed) {
 		ItemStack weapon = entity instanceof LivingEntity ? ((LivingEntity) entity).getItemInMainHand() : ItemStack.AIR;
-		String id = "death.attack." + getIdentifier();
+		String id = "death.attack." + originDamageType.messageId();
 		if (!weapon.isAir() && weapon.getDisplayName() != null) {
 			return Component.translatable(id + ".item", EntityUtils.getName(killed), EntityUtils.getName(entity), weapon.getDisplayName());
 		} else {
