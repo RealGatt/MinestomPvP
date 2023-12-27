@@ -20,7 +20,7 @@ import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.GlobalEventHandler;
-import net.minestom.server.event.player.PlayerLoginEvent;
+import net.minestom.server.event.player.AsyncPlayerPreLoginEvent;
 import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.minestom.server.event.player.PlayerTickEvent;
 import net.minestom.server.event.player.PlayerUseItemOnBlockEvent;
@@ -51,8 +51,7 @@ public class PvpTest {
 		instance.enableAutoChunkLoad(true);
 		
 		Pos spawn = new Pos(0, 60, 0);
-		MinecraftServer.getGlobalEventHandler().addListener(PlayerLoginEvent.class, event -> {
-			event.setSpawningInstance(instance);
+		MinecraftServer.getGlobalEventHandler().addListener(AsyncPlayerPreLoginEvent.class, event -> {
 			event.getPlayer().setRespawnPoint(spawn);
 			
 			EntityCreature entity = new EntityCreature(EntityType.ZOMBIE);
@@ -67,8 +66,6 @@ public class PvpTest {
 						.findAny();
 				
 				if (player.isPresent()) {
-					if (!player.get().damage(CustomDamageType.mob(entity), 1.0F))
-						return;
 					
 					LegacyKnockbackEvent legacyKnockbackEvent = new LegacyKnockbackEvent(player.get(), entity, true);
 					EventDispatcher.callCancellable(legacyKnockbackEvent, () -> {

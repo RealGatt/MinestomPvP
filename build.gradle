@@ -20,7 +20,6 @@ java {
 }
 
 dependencies {
-    compileOnly 'dev.hollowcube:minestom-ce:gatt'
     implementation 'dev.hollowcube:minestom-ce:gatt'
     testImplementation 'dev.hollowcube:minestom-ce:gatt'
     testImplementation 'com.github.TogAr2:MinestomFluids:b237b13a4b'

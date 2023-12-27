@@ -79,7 +79,8 @@ public class Tracker {
 		EventNode<EntityEvent> node = EventNode.type("tracker-events", EventFilter.ENTITY);
 		eventNode.addChild(node);
 		
-		node.addListener(PlayerLoginEvent.class, event -> {
+		node.addListener(PlayerSpawnEvent.class, event -> {
+			if (!event.isFirstSpawn()) return;
 			UUID uuid = event.getPlayer().getUuid();
 			
 			event.getPlayer().setTag(AttackManager.LAST_ATTACKED_TICKS, 0L);
