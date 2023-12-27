@@ -35,12 +35,16 @@ public class Tracker {
 	public static final Map<UUID, CombatManager> combatManager = new HashMap<>();
 	
 	public static boolean hasCooldown(Player player, Material material) {
+		if (!cooldownEnd.containsKey(player.getUuid()))
+			cooldownEnd.put(player.getUuid(), new HashMap<>());
 		Map<Material, Long> cooldownMap = cooldownEnd.get(player.getUuid());
 		
 		return cooldownMap.containsKey(material) && cooldownMap.get(material) > System.currentTimeMillis();
 	}
 	
 	public static void setCooldown(Player player, Material material, int durationTicks) {
+		if (!cooldownEnd.containsKey(player.getUuid()))
+			cooldownEnd.put(player.getUuid(), new HashMap<>());
 		cooldownEnd.get(player.getUuid()).put(material, System.currentTimeMillis() + (long) durationTicks * MinecraftServer.TICK_MS);
 		onCooldown(player, material, durationTicks);
 	}

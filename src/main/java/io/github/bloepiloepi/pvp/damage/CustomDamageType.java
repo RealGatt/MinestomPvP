@@ -14,7 +14,19 @@ import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class CustomDamageType {
+import java.util.ArrayList;
+import java.util.Collection;
+
+public class CustomDamageType  {
+
+	private static final Collection<CustomDamageType> typeCache = new ArrayList<>();
+	public static CustomDamageType getCustomTypeForDamage(DamageType type) {
+		// find the customdamagetype based on the origintype
+		return typeCache.stream().filter((ctd)->ctd.originDamageType == type).findFirst().orElse(UNKNOWN);
+	}
+
+	public static final CustomDamageType UNKNOWN = (new CustomDamageType(DamageType.GENERIC, "GENERIC"));
+
 	public static final CustomDamageType IN_FIRE = (new CustomDamageType(DamageType.IN_FIRE, "inFire")).setBypassesArmor().setFire();
 	public static final CustomDamageType LIGHTNING_BOLT = new CustomDamageType(DamageType.LIGHTNING_BOLT, "lightningBolt");
 	public static final CustomDamageType ON_FIRE = (new CustomDamageType(DamageType.ON_FIRE, "onFire")).setBypassesArmor().setFire();
@@ -26,7 +38,6 @@ public class CustomDamageType {
 	public static final CustomDamageType STARVE = (new CustomDamageType(DamageType.STARVE, "starve")).setBypassesArmor().setUnblockable();
 	public static final CustomDamageType CACTUS = new CustomDamageType(DamageType.CACTUS, "cactus");
 	public static final CustomDamageType FALL = (new CustomDamageType(DamageType.FALL, "fall")).setBypassesArmor().setFall();
-	public static final CustomDamageType ENDER_PEARL = (new CustomDamageType(DamageType.FALL, "fall")).setBypassesArmor().setFall();
 	public static final CustomDamageType FLY_INTO_WALL = (new CustomDamageType(DamageType.FLY_INTO_WALL, "flyIntoWall")).setBypassesArmor();
 	public static final CustomDamageType OUT_OF_WORLD = (new CustomDamageType(DamageType.OUT_OF_WORLD, "outOfWorld")).setBypassesArmor().setOutOfWorld();
 	public static final CustomDamageType GENERIC = (new CustomDamageType(DamageType.GENERIC, "generic")).setBypassesArmor();
@@ -58,6 +69,7 @@ public class CustomDamageType {
 	protected CustomDamageType(DamageType originDamageType, String name) {
 		this.name = name;
 		this.originDamageType = originDamageType;
+		typeCache.add(this);
 	}
 	
 	public static CustomDamageType sting(LivingEntity attacker) {
@@ -167,7 +179,11 @@ public class CustomDamageType {
 	public Entity getEntity() {
 		return null;
 	}
-	
+
+	public DamageType getOriginDamageType() {
+		return originDamageType;
+	}
+
 	protected CustomDamageType setBypassesArmor() {
 		this.bypassesArmor = true;
 		this.exhaustion = 0.0F;

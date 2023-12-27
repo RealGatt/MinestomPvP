@@ -81,17 +81,7 @@ public class DamageListener {
 	}
 	
 	private static CustomDamageType getCustomDamageType(EntityDamageEvent event) {
-		if (event.getDamageType() instanceof CustomDamageType) {
-			return (CustomDamageType) event.getDamageType();
-		} else {
-			if (event.getDamageType() == DamageType.GRAVITY) {
-				return CustomDamageType.FALL;
-			} else if (event.getDamageType() == DamageType.ON_FIRE) {
-				return CustomDamageType.ON_FIRE;
-			} else {
-				return CustomDamageType.OUT_OF_WORLD;
-			}
-		}
+		return CustomDamageType.getCustomTypeForDamage(event.getDamage().getType());
 	}
 	
 	private static float scaleWithDifficulty(float amount) {
