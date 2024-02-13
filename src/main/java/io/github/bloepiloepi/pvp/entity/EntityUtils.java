@@ -14,7 +14,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
-import net.minestom.server.entity.metadata.arrow.AbstractArrowMeta;
+import net.minestom.server.entity.metadata.projectile.AbstractArrowMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityFireEvent;
 import net.minestom.server.instance.Instance;

@@ -121,7 +121,7 @@ public class DamageListener {
 			player.triggerStatus((byte) 30);
 			player.triggerStatus((byte) 9);
 			
-			Player.Hand hand = player.getEntityMeta().getActiveHand();
+			Player.Hand hand = player.getPlayerMeta().getActiveHand();
 			player.refreshActiveHand(false, hand == Player.Hand.OFF, false);
 		}
 	}

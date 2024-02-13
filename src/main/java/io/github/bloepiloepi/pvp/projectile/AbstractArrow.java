@@ -15,7 +15,7 @@ import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.metadata.arrow.AbstractArrowMeta;
+import net.minestom.server.entity.metadata.projectile.AbstractArrowMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.item.ItemStack;

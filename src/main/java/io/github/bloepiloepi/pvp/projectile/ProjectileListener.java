@@ -416,7 +416,7 @@ public class ProjectileListener {
 		}).filter(event -> event.getItemStack().material() == Material.TRIDENT).build());
 		
 		if (config.isTridentEnabled()) node.addListener(PlayerTickEvent.class, event -> {
-			if (event.getPlayer().getEntityMeta().isInRiptideSpinAttack()) {
+			if (event.getPlayer().getPlayerMeta().isInRiptideSpinAttack()) {
 				Player player = event.getPlayer();
 				long ticks = player.getAliveTicks() - player.getTag(RIPTIDE_START);
 				AtomicBoolean stopRiptide = new AtomicBoolean(ticks >= 20);

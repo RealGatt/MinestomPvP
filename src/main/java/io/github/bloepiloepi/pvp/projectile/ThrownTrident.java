@@ -8,7 +8,7 @@ import net.kyori.adventure.sound.Sound;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.*;
-import net.minestom.server.entity.metadata.arrow.ThrownTridentMeta;
+import net.minestom.server.entity.metadata.projectile.ThrownTridentMeta;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.sound.SoundEvent;

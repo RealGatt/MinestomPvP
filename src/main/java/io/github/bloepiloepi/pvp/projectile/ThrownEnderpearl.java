@@ -48,7 +48,7 @@ public class ThrownEnderpearl extends CustomEntityProjectile implements ItemHold
 		
 		if (shooter instanceof Player player) {
 			if (player.isOnline() && player.getInstance() == getInstance()
-					&& player.getEntityMeta().getBedInWhichSleepingPosition() == null) {
+					&& player.getPlayerMeta().getBedInWhichSleepingPosition() == null) {
 				if (player.getVehicle() != null) {
 					player.getVehicle().removePassenger(player);
 				}
