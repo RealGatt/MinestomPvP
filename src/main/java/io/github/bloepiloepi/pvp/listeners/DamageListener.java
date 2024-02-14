@@ -22,7 +22,6 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.EventListener;
@@ -41,7 +40,6 @@ import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class DamageListener {
@@ -365,15 +363,17 @@ public class DamageListener {
 		// Play sound (copied from Minestom, because of complications with cancelling)
 		if (config.isSoundsEnabled() && sound != null)
 
-			entity.sendPacketToViewersAndSelf(new SoundEffectPacket(
-				sound,
-				1.0f,
-				entity instanceof Player ? Sound.Source.PLAYER : Sound.Source.HOSTILE,
-				entity.getPosition(),
-				1.0f,
-				1.0f,
-				0L
-		));
+			try {
+				entity.sendPacketToViewersAndSelf(new SoundEffectPacket(
+						sound,
+						1.0f,
+						entity instanceof Player ? Sound.Source.PLAYER : Sound.Source.HOSTILE,
+						entity.getPosition(),
+						1.0f,
+						1.0f,
+						0L
+				));
+			} catch (IllegalArgumentException ignored) {}
 		
 		if (death && !event.isCancelled()) {
 			EntityPreDeathEvent entityPreDeathEvent = new EntityPreDeathEvent(entity, type);
