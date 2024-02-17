@@ -31,6 +31,7 @@ import net.minestom.server.event.player.PlayerChangeHeldSlotEvent;
 import net.minestom.server.event.player.PlayerHandAnimationEvent;
 import net.minestom.server.event.trait.EntityInstanceEvent;
 import net.minestom.server.network.packet.server.play.EntityAnimationPacket;
+import net.minestom.server.network.packet.server.play.HitAnimationPacket;
 import net.minestom.server.network.packet.server.play.ParticlePacket;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.particle.ParticleCreator;
@@ -186,15 +187,9 @@ public class AttackManager {
 					Sound.Source.PLAYER, 1.0f, 1.0f
 			), attacker);
 		}
-		
-		// Play attack effects
-		if (attack.critical()) attacker.sendPacketToViewersAndSelf(new EntityAnimationPacket(
-				target.getEntityId(),
-				EntityAnimationPacket.Animation.CRITICAL_EFFECT
-		));
-		if (attack.magical()) attacker.sendPacketToViewersAndSelf(new EntityAnimationPacket(
-				target.getEntityId(),
-				EntityAnimationPacket.Animation.MAGICAL_CRITICAL_EFFECT
+
+		attacker.sendPacketToViewersAndSelf(new HitAnimationPacket(
+				target.getEntityId(), attacker.getPosition().yaw()
 		));
 		
 		// Thorns
