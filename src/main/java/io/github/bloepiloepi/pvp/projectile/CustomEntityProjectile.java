@@ -200,6 +200,7 @@ public class CustomEntityProjectile extends Entity {
 		if (noClip) return State.Flying;
 		
 		if (pos.samePoint(posNow)) {
+			if (instance == null) return State.StuckInBlock;
 			if (instance.getBlock(posNow).isSolid()) {
 				return State.StuckInBlock;
 			} else {
