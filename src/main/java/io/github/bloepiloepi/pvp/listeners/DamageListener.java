@@ -361,10 +361,8 @@ public class DamageListener {
 		}
 		
 		// Play sound (copied from Minestom, because of complications with cancelling)
-		System.out.println(1);
 		if (config.isSoundsEnabled() && sound != null)
 			try {
-				System.out.println(2);
 				entity.sendPacketToViewersAndSelf(new SoundEffectPacket(
 						sound,
 						1.0f,

@@ -4,6 +4,7 @@ import io.github.bloepiloepi.pvp.config.PvPConfig;
 import io.github.bloepiloepi.pvp.enchantment.CustomEnchantments;
 import io.github.bloepiloepi.pvp.entity.CustomPlayer;
 import io.github.bloepiloepi.pvp.entity.Tracker;
+import io.github.bloepiloepi.pvp.listeners.DamageSoundListener;
 import io.github.bloepiloepi.pvp.potion.effect.CustomPotionEffects;
 import io.github.bloepiloepi.pvp.potion.item.CustomPotionTypes;
 import net.minestom.server.MinecraftServer;
@@ -56,6 +57,7 @@ public class PvpExtension {
 		
 		Tracker.register(MinecraftServer.getGlobalEventHandler());
 		MinecraftServer.getConnectionManager().setPlayerProvider(CustomPlayer::new);
+		new DamageSoundListener();
 		
 		try {
 			Field isFood = Registry.MaterialEntry.class.getDeclaredField("isFood");
