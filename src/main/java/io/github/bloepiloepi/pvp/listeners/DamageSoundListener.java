@@ -15,6 +15,7 @@ public class DamageSoundListener {
 
     public DamageSoundListener() {
         MinecraftServer.getGlobalEventHandler().addListener(FinalAttackEvent.class, event -> {
+            if (event.isCancelled()) return;
             if (!(event.getTarget() instanceof Player) || !(event.getEntity() instanceof Player)) return;
             Player target = (Player) event.getTarget();
 
