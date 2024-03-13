@@ -20,9 +20,9 @@ java {
 }
 
 dependencies {
-    implementation group: 'net.minestom', name: 'minestom-snapshots', version: '7320437640'
-    testImplementation group: 'net.minestom', name: 'minestom-snapshots', version: '7320437640'
-    testImplementation 'com.github.TogAr2:MinestomFluids:b237b13a4b'
+    compileOnly group: 'net.minestom', name: 'minestom-snapshots', version: '7320437640'
+    testCompileOnly group: 'net.minestom', name: 'minestom-snapshots', version: '7320437640'
+    testCompileOnly 'com.github.TogAr2:MinestomFluids:b237b13a4b'
 }
 
 publishing {
