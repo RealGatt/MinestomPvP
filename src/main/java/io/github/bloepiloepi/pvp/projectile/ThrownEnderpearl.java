@@ -11,7 +11,6 @@ import net.minestom.server.entity.metadata.item.ThrownEnderPearlMeta;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.ParticlePacket;
 import net.minestom.server.particle.Particle;
-import net.minestom.server.particle.ParticleCreator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,11 +28,11 @@ public class ThrownEnderpearl extends CustomEntityProjectile implements ItemHold
 		ThreadLocalRandom random = ThreadLocalRandom.current();
 		
 		for (int i = 0; i < 32; i++) {
-			ParticlePacket packet = ParticleCreator.createParticlePacket(
+			ParticlePacket packet = new ParticlePacket(
 					Particle.PORTAL, false,
 					position.x(), position.y() + random.nextDouble() * 2, position.z(),
 					(float) random.nextGaussian(), 0.0F, (float) random.nextGaussian(),
-					0, 1, (writer) -> {});
+					0, 1);
 			
 			sendPacketToViewersAndSelf(packet);
 		}

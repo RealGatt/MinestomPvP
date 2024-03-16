@@ -29,7 +29,7 @@ public class DamageCommand extends Command {
 				return;
 			}
 			
-			((LivingEntity) entity).damage(CustomDamageType.GENERIC, args.get(amountArg));
+			((LivingEntity) entity).damage(CustomDamageType.GENERIC.originDamageType, args.get(amountArg));
 		}, entityArg, amountArg);
 		
 		addSyntax((sender, args) -> {
@@ -43,7 +43,7 @@ public class DamageCommand extends Command {
 				return;
 			}
 			
-			((LivingEntity) entity).damage(CustomDamageType.player(sender.asPlayer()), args.get(amountArg));
+			((LivingEntity) entity).damage(CustomDamageType.player(sender.asPlayer()).originDamageType, args.get(amountArg));
 		}, nonGenArg, entityArg, amountArg);
 	}
 }

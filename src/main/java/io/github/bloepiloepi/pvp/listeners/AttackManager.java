@@ -33,7 +33,6 @@ import net.minestom.server.event.trait.EntityInstanceEvent;
 import net.minestom.server.network.packet.server.play.HitAnimationPacket;
 import net.minestom.server.network.packet.server.play.ParticlePacket;
 import net.minestom.server.particle.Particle;
-import net.minestom.server.particle.ParticleCreator;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.tag.Tag;
@@ -210,11 +209,11 @@ public class AttackManager {
 			if (config.isDamageIndicatorParticlesEnabled() && damageDone > 2) {
 				int particleCount = (int) (damageDone * 0.5);
 				Pos targetPosition = target.getPosition();
-				ParticlePacket packet = ParticleCreator.createParticlePacket(
+				ParticlePacket packet = new ParticlePacket(
 						Particle.DAMAGE_INDICATOR, false,
 						targetPosition.x(), EntityUtils.getBodyY(target, 0.5), targetPosition.z(),
 						0.1f, 0, 0.1f,
-						0.2F, particleCount, null
+						0.2F, particleCount
 				);
 				target.sendPacketToViewersAndSelf(packet);
 			}
@@ -414,11 +413,11 @@ public class AttackManager {
 		Pos pos = attacker.getPosition();
 		double x = -Math.sin(Math.toRadians(pos.yaw()));
 		double z = Math.cos(Math.toRadians(pos.yaw()));
-		ParticlePacket packet = ParticleCreator.createParticlePacket(
+		ParticlePacket packet = new ParticlePacket(
 				Particle.SWEEP_ATTACK, false,
 				pos.x() + x, EntityUtils.getBodyY(attacker, 0.5), pos.z() + z,
 				(float) x, 0, (float) z,
-				0, 0, null);
+				0, 0);
 		
 		attacker.sendPacketToViewersAndSelf(packet);
 	}
