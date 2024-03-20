@@ -11,6 +11,7 @@ import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.network.packet.server.play.HitAnimationPacket;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.particle.ParticleCreator;
 import net.minestom.server.potion.PotionEffect;
@@ -79,6 +80,9 @@ public class FallDamageHandler {
 				}
 				try {
 					entity.damage(CustomDamageType.FALL.originDamageType, damage);
+					entity.sendPacketToViewersAndSelf(new HitAnimationPacket(
+							entity.getEntityId(), entity.getPosition().yaw()
+					));
 				} catch (IllegalArgumentException ignored) {}
 			}
 		} else if (dy < 0) {
