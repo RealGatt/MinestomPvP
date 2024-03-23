@@ -65,7 +65,7 @@ public class ExplosionListener {
 				if (entity.getBoundingBox().intersectBox(above.sub(entity.getPosition()), checkIntersect)) return;
 			}
 			
-			CrystalEntity entity = new CrystalEntity();
+			CrystalEntity entity = new CrystalEntity(instance);
 			entity.setInstance(instance, above.add(0.5, 0, 0.5));
 			
 			if (!event.getPlayer().isCreative())
