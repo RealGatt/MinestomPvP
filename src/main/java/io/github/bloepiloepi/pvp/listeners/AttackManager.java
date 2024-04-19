@@ -248,6 +248,7 @@ public class AttackManager {
 		
 		// Apply cooldownProgress to damage
 		damage *= 0.2 + cooldownProgress * cooldownProgress * 0.8;
+		damage = damage * attacker.getItemInMainHand().meta().getDamage();
 		enchantedDamage *= cooldownProgress;
 		
 		// Calculate attacks

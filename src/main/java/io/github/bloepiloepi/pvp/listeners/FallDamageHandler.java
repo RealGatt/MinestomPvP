@@ -79,6 +79,9 @@ public class FallDamageHandler {
 				}
 				try {
 					entity.damage(CustomDamageType.FALL.originDamageType, damage);
+					entity.sendPacketToViewersAndSelf(new HitAnimationPacket(
+							entity.getEntityId(), entity.getPosition().yaw()
+					));
 				} catch (IllegalArgumentException ignored) {}
 			}
 		} else if (dy < 0) {
