@@ -1,5 +1,6 @@
 # MinestomPvP
 
+WARNING: DO NOT USE THE 1.20.5 VERSION YET! IT IS HIGHLY UNSTABLE AND CONTAINS SOME BUGS AT THE MOMENT. I am working to fix all of those.
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 [![license](https://img.shields.io/github/license/TogAr2/MinestomPvP.svg?style=flat-square)](LICENSE)
 [![platform](https://img.shields.io/badge/platform-Minestom-ff69b4?style=flat-square)](https://github.com/Minestom/Minestom)
