@@ -3,7 +3,6 @@
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 [![license](https://img.shields.io/github/license/TogAr2/MinestomPvP.svg?style=flat-square)](LICENSE)
 [![platform](https://img.shields.io/badge/platform-Minestom-ff69b4?style=flat-square)](https://github.com/Minestom/Minestom)
-[![](https://jitpack.io/v/JasperTheMinecraftDev/MinestomPvP.svg?style=flat-square)](https://jitpack.io/#JasperTheMinecraftDev/MinestomPvP)
 
 MinestomPvP is an extension for Minestom.
 It tries to mimic vanilla (and pre-1.9) PvP as good as possible, while also focusing on customizability and usability.
@@ -11,7 +10,7 @@ It tries to mimic vanilla (and pre-1.9) PvP as good as possible, while also focu
 But, MinestomPvP does not only provide PvP, it also provides everything around it (e.g., status effects and food).
 You can easily choose which features you want to use.
 
-The maven repository is available on [Jitpack](https://jitpack.io/#JasperTheMinecraftDev/MinestomPvP).
+MinestomPvP is available at my own Maven repository, information about that can be found in [integration](#integration).
 
 **You might not want to put this extension in your extensions folder, more information at [usage](#usage).**
 
@@ -98,6 +97,35 @@ To enable the cooldown again and set the attack damage to the new value, use `fa
 A lot of servers like to customize their 1.8 knockback. It is also possible to do so with this extension. In `EntityKnockbackEvent`, you can set a `LegacyKnockbackSettings` object. It contains information about how the knockback is calculated. A builder is obtainable by using `LegacyKnockbackSettings.builder()`. For more information, check the [config of BukkitOldCombatMechanics](https://github.com/kernitus/BukkitOldCombatMechanics/blob/d222286fd84fe983fdbdff79699182837871ab9b/src/main/resources/config.yml#L279).
 
 ### Integration
+
+First, include the repository:
+Using gradle:
+```gradle
+    maven { url 'https://nexus.juriantech.nl/repository/maven-public' }
+
+```
+Using Maven:
+```xml
+    <repository>
+        <id>juriantech-public</id>
+        <url>https://nexus.juriantech.nl/repository/maven-public</url>
+    </repository>
+```
+
+Then, include the dependency.
+Using gradle:
+```gradle
+    implementation 'io.github.bloepiloepi:MinestomPvP:{INSERT LATEST VERSION}'
+```
+
+Using maven
+```xml
+    <dependency>
+        <groupId>io.github.bloepiloepi</groupId>
+        <artifactId>MinestomPvP</artifactId>
+        <version>{INSERT LATEST VERSION}</version>
+    </dependency>
+```
 
 To integrate this extension into your minestom server, you may have to tweak a little bit to make sure everything works correctly.
 
