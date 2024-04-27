@@ -209,13 +209,21 @@ public abstract class AbstractArrow extends CustomEntityProjectile {
 			}
 		}
 	}
-	
+
+	boolean soundPlayed = false;
 	@Override
 	public void onStuck() {
 		if (!isSilent()) {
 			ThreadLocalRandom random = ThreadLocalRandom.current();
-			SoundManager.sendToAround(this, getSound(), Sound.Source.NEUTRAL,
-					1.0F, 1.2F / (random.nextFloat() * 0.2F + 0.9F));
+			if (instance == null) {
+				return;
+			}
+
+			if (!soundPlayed) {
+				SoundManager.sendToAround(instance, position, getSound(), Sound.Source.NEUTRAL,
+						1.0F, 1.2F / (random.nextFloat() * 0.2F + 0.9F));
+				soundPlayed = true;
+			}
 		}
 		
 		pickupDelay = 7;
