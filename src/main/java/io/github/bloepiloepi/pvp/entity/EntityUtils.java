@@ -41,13 +41,13 @@ public class EntityUtils {
 	public static final Tag<Long> FIRE_EXTINGUISH_TIME = Tag.Long("fireExtinguishTime");
 	
 	public static boolean hasEffect(Entity entity, PotionEffect type) {
-		return entity.getActiveEffects().stream().anyMatch((effect) -> effect.getPotion().effect() == type);
+		return entity.getActiveEffects().stream().anyMatch((effect) -> effect.potion().effect() == type);
 	}
 	
 	public static Potion getEffect(Entity entity, PotionEffect type) {
 		for (TimedPotion potion : entity.getActiveEffects()) {
-			if (potion.getPotion().effect() == type) {
-				return potion.getPotion();
+			if (potion.potion().effect() == type) {
+				return potion.potion();
 			}
 		}
 		
@@ -186,7 +186,7 @@ public class EntityUtils {
 	
 	public static boolean hasPotionEffect(LivingEntity entity, PotionEffect effect) {
 		return entity.getActiveEffects().stream()
-				.map((potion) -> potion.getPotion().effect())
+				.map((potion) -> potion.potion().effect())
 				.anyMatch((potionEffect) -> potionEffect == effect);
 	}
 	
@@ -221,7 +221,7 @@ public class EntityUtils {
 	
 	private static Pair<ItemStack, Integer> getHeldItem(Player player, Predicate<ItemStack> predicate) {
 		ItemStack stack = player.getItemInHand(Player.Hand.OFF);
-		if (predicate.test(stack)) return Pair.of(stack, PlayerInventoryUtils.OFFHAND_SLOT);
+		if (predicate.test(stack)) return Pair.of(stack, PlayerInventoryUtils.OFF_HAND_SLOT);
 		
 		stack = player.getItemInHand(Player.Hand.MAIN);
 		if (predicate.test(stack)) return Pair.of(stack, (int) player.getHeldSlot());

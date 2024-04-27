@@ -25,8 +25,6 @@ public class DamageSoundListener {
 
             target.sendPacketToViewersAndSelf(new SoundEffectPacket(
                     SoundEvent.ENTITY_PLAYER_HURT,
-                    null,
-                    null,
                     Sound.Source.PLAYER,
                     target.getPosition().blockX(),
                     target.getPosition().blockY(),

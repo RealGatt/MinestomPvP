@@ -11,6 +11,7 @@ import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.network.packet.server.play.HitAnimationPacket;
 import net.minestom.server.network.packet.server.play.ParticlePacket;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.particle.data.BlockParticleData;

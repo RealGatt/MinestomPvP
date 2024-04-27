@@ -7,18 +7,19 @@ import io.github.bloepiloepi.pvp.events.EquipmentDamageEvent;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.event.EventDispatcher;
-import net.minestom.server.item.Enchantment;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.enchant.Enchantment;
 
 import java.util.function.Consumer;
 
 public class ItemUtils {
 	
 	public static ItemStack damage(ItemStack stack, int amount) {
-		if (amount == 0 || stack.material().registry().maxDamage() <= 0)
+		if (amount == 0 || stack.get(ItemComponent.MAX_DAMAGE).floatValue() <= 0)
 			return stack;
 		
-		return stack.withMeta(meta -> {
+		return stack.with(meta -> {
 			int unbreaking = EnchantmentUtils.getLevel(Enchantment.UNBREAKING, stack);
 			int preventAmount = 0;
 			int newAmount = amount;
@@ -34,19 +35,19 @@ public class ItemUtils {
 			newAmount -= preventAmount;
 			if (newAmount <= 0) return;
 			
-			meta.damage(stack.meta().getDamage() + newAmount);
+			meta.set(ItemComponent.DAMAGE, stack.get(ItemComponent.DAMAGE).intValue() + newAmount);
 		});
 	}
 	
 	public static <T extends LivingEntity> ItemStack damage(ItemStack stack, int amount,
 	                                                        T entity, Consumer<T> breakCallback) {
-		if (amount == 0 || stack.material().registry().maxDamage() <= 0)
+		if (amount == 0 || stack.get(ItemComponent.MAX_DAMAGE).doubleValue() <= 0)
 			return stack;
 		
 		ItemStack newStack = damage(stack, amount);
-		if (newStack.meta().getDamage() >= stack.material().registry().maxDamage()) {
+		if (newStack.get(ItemComponent.DAMAGE).doubleValue() >= stack.get(ItemComponent.MAX_DAMAGE).doubleValue()) {
 			breakCallback.accept(entity);
-			newStack = newStack.withAmount(i -> i - 1).withMeta(meta -> meta.damage(0));
+			newStack = newStack.withAmount(i -> i - 1).with(meta -> meta.set(ItemComponent.DAMAGE, 0));
 		}
 		
 		return newStack;

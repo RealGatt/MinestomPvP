@@ -15,13 +15,13 @@ import io.github.bloepiloepi.pvp.utils.ItemUtils;
 import it.unimi.dsi.fastutil.Pair;
 import net.kyori.adventure.sound.Sound;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.attribute.Attribute;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.EventListener;
@@ -32,7 +32,6 @@ import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.event.trait.EntityInstanceEvent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.network.packet.server.play.SoundEffectPacket;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.sound.SoundEvent;
@@ -223,7 +222,7 @@ public class DamageListener {
 			EventDispatcher.callCancellable(legacyKnockbackEvent, () -> {
 				LegacyKnockbackSettings settings = legacyKnockbackEvent.getSettings();
 				
-				float kbResistance = entity.getAttributeValue(Attribute.KNOCKBACK_RESISTANCE);
+				float kbResistance = (float) entity.getAttributeValue(Attribute.GENERIC_KNOCKBACK_RESISTANCE);
 				double horizontal = settings.horizontal() * (1 - kbResistance);
 				double vertical = settings.vertical() * (1 - kbResistance);
 				Vec horizontalModifier = new Vec(finalDx, finalDz).normalize().mul(horizontal);
@@ -424,15 +423,15 @@ public class DamageListener {
 		if (config.isArmorDisabled()) return amount;
 		if (type.bypassesArmor()) return amount;
 		
-		float armorValue = entity.getAttributeValue(Attribute.ARMOR);
+		float armorValue = (float) entity.getAttributeValue(Attribute.GENERIC_ARMOR);
 		if (config.isLegacy()) {
 			int armorMultiplier = 25 - (int) armorValue;
 			return (amount * (float) armorMultiplier) / 25;
 		} else {
 			return getDamageLeft(
 					amount, (float) Math.floor(armorValue),
-					entity.getAttributeValue(Attribute.ARMOR_TOUGHNESS)
-			);
+                    (float) entity.getAttributeValue(Attribute.GENERIC_ARMOR_TOUGHNESS)
+            );
 		}
 	}
 	

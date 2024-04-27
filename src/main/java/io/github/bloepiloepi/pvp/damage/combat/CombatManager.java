@@ -9,6 +9,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.EndCombatEventPacket;
 import net.minestom.server.network.packet.server.play.EnterCombatEventPacket;
@@ -16,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class CombatManager {
 	private final List<CombatEntry> entries = new ArrayList<>();
@@ -117,15 +119,15 @@ public class CombatManager {
 		
 		if (firstAttacker != null && firstAttacker != lastAttacker) {
 			ItemStack weapon = firstAttacker instanceof LivingEntity ? ((LivingEntity) firstAttacker).getItemInMainHand() : ItemStack.AIR;
-			if (!weapon.isAir() && weapon.getDisplayName() != null) {
-				return Component.translatable("death.fell.assist.item", getEntityName(), EntityUtils.getName(firstAttacker), weapon.getDisplayName());
+			if (!weapon.isAir() && weapon.get(ItemComponent.ITEM_NAME) != null) {
+				return Component.translatable("death.fell.assist.item", getEntityName(), EntityUtils.getName(firstAttacker), Objects.requireNonNull(weapon.get(ItemComponent.ITEM_NAME)));
 			} else {
 				return Component.translatable("death.fell.assist", getEntityName(), EntityUtils.getName(firstAttacker));
 			}
 		} else if (lastAttacker != null) {
 			ItemStack weapon = lastAttacker instanceof LivingEntity ? ((LivingEntity) lastAttacker).getItemInMainHand() : ItemStack.AIR;
-			if (!weapon.isAir() && weapon.getDisplayName() != null) {
-				return Component.translatable("death.fell.finish.item", getEntityName(), EntityUtils.getName(lastAttacker), weapon.getDisplayName());
+			if (!weapon.isAir() && weapon.get(ItemComponent.ITEM_NAME) != null) {
+				return Component.translatable("death.fell.finish.item", getEntityName(), EntityUtils.getName(lastAttacker), Objects.requireNonNull(weapon.get(ItemComponent.ITEM_NAME)));
 			} else {
 				return Component.translatable("death.fell.finish", getEntityName(), EntityUtils.getName(lastAttacker));
 			}

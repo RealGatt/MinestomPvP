@@ -3,13 +3,12 @@ plugins {
     id 'maven-publish'
 }
 
-sourceCompatibility = 17
+sourceCompatibility = 21
 
 group 'io.github.bloepiloepi'
 version '2.0'
 
 repositories {
-    mavenLocal()
     mavenCentral()
     maven { url 'https://jitpack.io' }
 }
@@ -20,8 +19,8 @@ java {
 }
 
 dependencies {
-    compileOnly group: 'net.minestom', name: 'minestom-snapshots', version: '4b31570c9d'
-    testCompileOnly group: 'net.minestom', name: 'minestom-snapshots', version: '4b31570c9d'
+    compileOnly 'net.minestom:minestom-snapshots:1_20_5-95c5f6675f'
+    testCompileOnly 'net.minestom:minestom-snapshots:1_20_5-95c5f6675f'
     testCompileOnly 'com.github.TogAr2:MinestomFluids:b237b13a4b'
 }
 

@@ -6,7 +6,7 @@ import io.github.bloepiloepi.pvp.potion.PotionListener;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.LivingEntity;
-import net.minestom.server.item.Enchantment;
+import net.minestom.server.item.enchant.Enchantment;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
 
@@ -21,7 +21,7 @@ public class DamageEnchantment extends CustomEnchantment {
 	}
 	
 	@Override
-	public float getAttackDamage(short level, EntityGroup group, boolean legacy) {
+	public float getAttackDamage(Integer level, EntityGroup group, boolean legacy) {
 		if (type == Type.ALL) {
 			if (legacy) return level * 1.25F;
 			return 1.0F + (float) Math.max(0, level - 1) * 0.5F;

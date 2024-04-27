@@ -4,13 +4,13 @@ import io.github.bloepiloepi.pvp.damage.CustomDamageType;
 import io.github.bloepiloepi.pvp.entity.EntityGroup;
 import io.github.bloepiloepi.pvp.entity.EntityUtils;
 import io.github.bloepiloepi.pvp.food.HungerManager;
-import net.minestom.server.attribute.Attribute;
-import net.minestom.server.attribute.AttributeInstance;
-import net.minestom.server.attribute.AttributeModifier;
-import net.minestom.server.attribute.AttributeOperation;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.attribute.Attribute;
+import net.minestom.server.entity.attribute.AttributeInstance;
+import net.minestom.server.entity.attribute.AttributeModifier;
+import net.minestom.server.entity.attribute.AttributeOperation;
 import net.minestom.server.potion.PotionEffect;
 import org.jetbrains.annotations.Nullable;
 
@@ -53,7 +53,7 @@ public class CustomPotionEffect {
 	
 	public void applyUpdateEffect(LivingEntity entity, byte amplifier, boolean legacy) {
 		if (potionEffect == PotionEffect.REGENERATION) {
-			if (entity.getHealth() < entity.getMaxHealth()) {
+			if (entity.getHealth() < entity.getAttributeValue(Attribute.GENERIC_MAX_HEALTH)) {
 				entity.setHealth(entity.getHealth() + 1);
 			}
 			return;

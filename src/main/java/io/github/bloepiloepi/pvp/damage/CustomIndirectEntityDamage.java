@@ -6,9 +6,12 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 public class CustomIndirectEntityDamage extends CustomEntityDamage {
 	private final @Nullable Entity owner;
@@ -40,8 +43,8 @@ public class CustomIndirectEntityDamage extends CustomEntityDamage {
 		Component ownerName = owner == null ? EntityUtils.getName(entity) : EntityUtils.getName(owner);
 		ItemStack weapon = entity instanceof LivingEntity ? ((LivingEntity) entity).getItemInMainHand() : ItemStack.AIR;
 		String id = "death.attack." + originDamageType.messageId();
-		if (!weapon.isAir() && weapon.getDisplayName() != null) {
-			return Component.translatable(id + ".item", EntityUtils.getName(killed), ownerName, weapon.getDisplayName());
+		if (!weapon.isAir() && weapon.get(ItemComponent.ITEM_NAME) != null) {
+			return Component.translatable(id + ".item", EntityUtils.getName(killed), ownerName, Objects.requireNonNull(weapon.get(ItemComponent.ITEM_NAME)));
 		} else {
 			return Component.translatable(id, EntityUtils.getName(killed), ownerName);
 		}

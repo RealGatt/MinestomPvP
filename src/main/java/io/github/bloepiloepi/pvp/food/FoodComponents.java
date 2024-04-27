@@ -4,25 +4,26 @@ import io.github.bloepiloepi.pvp.entity.EntityUtils;
 import io.github.bloepiloepi.pvp.entity.Tracker;
 import io.github.bloepiloepi.pvp.potion.PotionListener;
 import io.github.bloepiloepi.pvp.utils.SoundManager;
+import net.kyori.adventure.nbt.BinaryTag;
+import net.kyori.adventure.nbt.ListBinaryTag;
 import net.kyori.adventure.sound.Sound;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.component.SuspiciousStewEffects;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.MathUtils;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTList;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class FoodComponents {
-	public static final Tag<NBT> SUSPICIOUS_STEW_EFFECTS = Tag.NBT("Effects");
+	public static final Tag<BinaryTag> SUSPICIOUS_STEW_EFFECTS = Tag.NBT("Effects");
 	private static final List<FoodComponent> COMPONENTS = new ArrayList<>();
 	
 	public static final FoodComponent APPLE = (new FoodComponent.Builder()).hunger(4).saturationModifier(0.3F).build(Material.APPLE);
@@ -84,25 +85,14 @@ public class FoodComponents {
 	private static FoodComponent createSuspiciousStew() {
 		return createSoupBuilder(6, true).onEat((player, stack) -> {
 			if (stack.hasTag(SUSPICIOUS_STEW_EFFECTS)) {
-				NBT effectNbt = stack.getTag(SUSPICIOUS_STEW_EFFECTS);
-				if (!(effectNbt instanceof NBTList nbtList)) return;
-				NBTList<NBTCompound> effects = (NBTList<NBTCompound>) nbtList;
-				
-				for (NBTCompound effectNBT : effects) {
-					int duration = 160;
-					if (effectNBT.containsKey("EffectDuration")) {
-						Integer i = effectNBT.getAsInt("EffectDuration");
-						if (i != null) duration = i;
-					}
-					
-					Byte effectId = effectNBT.getByte("EffectId");
-					if (effectId != null) {
-						PotionEffect potionEffect = PotionEffect.fromId(effectId);
-						if (potionEffect != null) {
-							player.addEffect(new Potion(potionEffect, (byte) 0, duration, PotionListener.defaultFlags()));
-						}
-					}
-				}
+				List<SuspiciousStewEffects.Effect> effects = stack.get(ItemComponent.SUSPICIOUS_STEW_EFFECTS).effects();
+
+				for (SuspiciousStewEffects.Effect effect : effects) {
+					int duration = effect.durationTicks();
+
+					PotionEffect potionEffect = effect.id();
+                    player.addEffect(new Potion(potionEffect, (byte) 0, duration, PotionListener.defaultFlags()));
+                }
 			}
 		}).build(Material.SUSPICIOUS_STEW);
 	}
