@@ -58,14 +58,5 @@ public class PvpExtension {
 		Tracker.register(MinecraftServer.getGlobalEventHandler());
 		MinecraftServer.getConnectionManager().setPlayerProvider(CustomPlayer::new);
 		new DamageSoundListener();
-		
-		try {
-			Field isFood = Registry.MaterialEntry.class.getDeclaredField("isFood");
-			isFood.setAccessible(true);
-			isFood.set(Material.POTION.registry(), true);
-			isFood.set(Material.MILK_BUCKET.registry(), true);
-		} catch (NoSuchFieldException | IllegalAccessException e) {
-			e.printStackTrace();
-		}
 	}
 }
