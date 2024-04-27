@@ -22,11 +22,9 @@ public class HungerManager {
 	}
 	
 	public static void eat(Player player, Material material) {
-		if (material.registry().custom().getBoolean("edible")) {
-			FoodComponent foodComponent = FoodComponents.fromMaterial(material);
-			assert foodComponent != null;
-			add(player, foodComponent.getHunger(), foodComponent.getSaturationModifier());
-		}
+		FoodComponent foodComponent = FoodComponents.fromMaterial(material);
+		assert foodComponent != null;
+		add(player, foodComponent.getHunger(), foodComponent.getSaturationModifier());
 	}
 	
 	public static void update(Player player, FoodConfig config) {
