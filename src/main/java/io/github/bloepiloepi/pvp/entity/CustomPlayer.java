@@ -1,15 +1,12 @@
 package io.github.bloepiloepi.pvp.entity;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityVelocityEvent;
-import net.minestom.server.instance.Chunk;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.potion.PotionEffect;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -72,7 +69,7 @@ public class CustomPlayer extends Player implements PvpPlayer {
 			sendPacketToViewersAndSelf(getVelocityPacket());
 		}
 	}
-	
+	/*
 	@SuppressWarnings("SynchronizationOnLocalVariableOrMethodParameter")
 	@Override
 	protected void updateVelocity(boolean wasOnGround, boolean flying, Pos positionBeforeMove, Vec newVelocity) {
@@ -110,5 +107,5 @@ public class CustomPlayer extends Player implements PvpPlayer {
 		}
 		
 		sendImmediateVelocityUpdate();
-	}
+	} TODO: Check if this is really needed, otherwise it can be removed */
 }

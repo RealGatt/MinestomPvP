@@ -1,14 +1,18 @@
 package io.github.bloepiloepi.pvp.enums;
 
 import io.github.bloepiloepi.pvp.utils.ModifierUUID;
-import net.minestom.server.attribute.Attribute;
-import net.minestom.server.attribute.AttributeModifier;
-import net.minestom.server.attribute.AttributeOperation;
 import net.minestom.server.entity.EquipmentSlot;
+import net.minestom.server.entity.attribute.Attribute;
+import net.minestom.server.entity.attribute.AttributeModifier;
+import net.minestom.server.entity.attribute.AttributeOperation;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.attribute.AttributeSlot;
 import net.minestom.server.item.attribute.ItemAttribute;
+import net.minestom.server.item.component.AttributeList;
 import net.minestom.server.sound.SoundEvent;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -65,10 +69,10 @@ public enum ArmorMaterial {
 	
 	public static Map<Attribute, List<AttributeModifier>> getAttributes(@Nullable ArmorMaterial material, EquipmentSlot slot, ItemStack item, boolean legacy) {
 		Map<Attribute, List<AttributeModifier>> modifiers = new HashMap<>();
-		for (ItemAttribute itemAttribute : item.meta().getAttributes()) {
-			if (EquipmentSlot.fromAttributeSlot(itemAttribute.slot()) == slot) {
+		for (AttributeList.Modifier itemAttribute : item.get(ItemComponent.ATTRIBUTE_MODIFIERS).modifiers()) {
+			if (ArmorMaterial.fromAttributeSlot(itemAttribute.slot()) == slot) {
 				modifiers.computeIfAbsent(itemAttribute.attribute(), k -> new ArrayList<>())
-						.add(new AttributeModifier(itemAttribute.uuid(), itemAttribute.name(), (float) itemAttribute.amount(), itemAttribute.operation()));
+						.add(new AttributeModifier(itemAttribute.modifier().id(), itemAttribute.attribute().name(), (float) itemAttribute.modifier().amount(), itemAttribute.modifier().operation()));
 			}
 		}
 		
@@ -76,10 +80,10 @@ public enum ArmorMaterial {
 		if (material != null) {
 			if (slot == getRequiredSlot(item.material())) {
 				UUID modifierUUID = getModifierUUID(slot);
-				modifiers.computeIfAbsent(Attribute.ARMOR, k -> new ArrayList<>()).add(new AttributeModifier(modifierUUID, "Armor modifier", material.getProtectionAmount(slot, legacy), AttributeOperation.ADDITION));
-				modifiers.computeIfAbsent(Attribute.ARMOR_TOUGHNESS, k -> new ArrayList<>()).add(new AttributeModifier(modifierUUID, "Armor toughness", material.toughness, AttributeOperation.ADDITION));
+				modifiers.computeIfAbsent(Attribute.GENERIC_ARMOR, k -> new ArrayList<>()).add(new AttributeModifier(modifierUUID, "Armor modifier", material.getProtectionAmount(slot, legacy), AttributeOperation.ADD_VALUE));
+				modifiers.computeIfAbsent(Attribute.GENERIC_ARMOR_TOUGHNESS, k -> new ArrayList<>()).add(new AttributeModifier(modifierUUID, "Armor toughness", material.toughness, AttributeOperation.ADD_VALUE));
 				if (material.knockbackResistance > 0) {
-					modifiers.computeIfAbsent(Attribute.KNOCKBACK_RESISTANCE, k -> new ArrayList<>()).add(new AttributeModifier(modifierUUID, "Armor knockback resistance", material.knockbackResistance, AttributeOperation.ADDITION));
+					modifiers.computeIfAbsent(Attribute.GENERIC_KNOCKBACK_RESISTANCE, k -> new ArrayList<>()).add(new AttributeModifier(modifierUUID, "Armor knockback resistance", material.knockbackResistance, AttributeOperation.ADD_VALUE));
 				}
 			}
 		}
@@ -89,22 +93,34 @@ public enum ArmorMaterial {
 	
 	public static Map<Attribute, List<UUID>> getAttributeIds(@Nullable ArmorMaterial material, EquipmentSlot slot, ItemStack item) {
 		Map<Attribute, List<UUID>> modifiers = new HashMap<>();
-		for (ItemAttribute itemAttribute : item.meta().getAttributes()) {
-			if (EquipmentSlot.fromAttributeSlot(itemAttribute.slot()) == slot) {
-				modifiers.computeIfAbsent(itemAttribute.attribute(), k -> new ArrayList<>()).add(itemAttribute.uuid());
+		for (AttributeList.Modifier itemAttribute : item.get(ItemComponent.ATTRIBUTE_MODIFIERS).modifiers()) {
+			if (fromAttributeSlot(itemAttribute.slot()) == slot) {
+				modifiers.computeIfAbsent(itemAttribute.attribute(), k -> new ArrayList<>()).add(itemAttribute.modifier().id());
 			}
 		}
 		
 		if (material != null) {
 			if (slot == getRequiredSlot(item.material())) {
 				UUID modifierUUID = getModifierUUID(slot);
-				modifiers.computeIfAbsent(Attribute.ARMOR, k -> new ArrayList<>()).add(modifierUUID);
-				modifiers.computeIfAbsent(Attribute.ARMOR_TOUGHNESS, k -> new ArrayList<>()).add(modifierUUID);
-				modifiers.computeIfAbsent(Attribute.KNOCKBACK_RESISTANCE, k -> new ArrayList<>()).add(modifierUUID);
+				modifiers.computeIfAbsent(Attribute.GENERIC_ARMOR, k -> new ArrayList<>()).add(modifierUUID);
+				modifiers.computeIfAbsent(Attribute.GENERIC_ARMOR_TOUGHNESS, k -> new ArrayList<>()).add(modifierUUID);
+				modifiers.computeIfAbsent(Attribute.GENERIC_KNOCKBACK_RESISTANCE, k -> new ArrayList<>()).add(modifierUUID);
 			}
 		}
 		
 		return modifiers;
+	}
+
+	public static @NotNull EquipmentSlot fromAttributeSlot(@NotNull AttributeSlot attributeSlot) {
+		return switch (attributeSlot) {
+			case MAINHAND -> EquipmentSlot.MAIN_HAND;
+			case OFFHAND -> EquipmentSlot.OFF_HAND;
+			case FEET -> EquipmentSlot.BOOTS;
+			case LEGS -> EquipmentSlot.LEGGINGS;
+			case CHEST -> EquipmentSlot.CHESTPLATE;
+			case HEAD -> EquipmentSlot.HELMET;
+            default -> throw new IllegalStateException("Unexpected value: " + attributeSlot);
+        };
 	}
 	
 	public static EquipmentSlot getRequiredSlot(Material material) {

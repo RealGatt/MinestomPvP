@@ -4,6 +4,7 @@ import io.github.bloepiloepi.pvp.config.ExplosionConfig;
 import io.github.bloepiloepi.pvp.config.PvPConfig;
 import io.github.bloepiloepi.pvp.utils.ItemUtils;
 import io.github.bloepiloepi.pvp.utils.SoundManager;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.sound.Sound;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
@@ -21,7 +22,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
 
 public class ExplosionListener {
 	
@@ -65,7 +65,7 @@ public class ExplosionListener {
 				if (entity.getBoundingBox().intersectBox(above.sub(entity.getPosition()), checkIntersect)) return;
 			}
 			
-			CrystalEntity entity = new CrystalEntity();
+			CrystalEntity entity = new CrystalEntity(instance);
 			entity.setInstance(instance, above.add(0.5, 0, 0.5));
 			
 			if (!event.getPlayer().isCreative())
@@ -111,7 +111,7 @@ public class ExplosionListener {
 						(float) (event.getBlockPosition().y() + 0.5),
 						(float) (event.getBlockPosition().z() + 0.5),
 						5.0f,
-						NBT.Compound(NBT -> NBT.setByte("fire", (byte) 1).setByte("anchor", (byte) 1))
+						CompoundBinaryTag.empty().putByte("fire", (byte) 1).putByte("anchor", (byte) 1)
 				);
 			}
 			

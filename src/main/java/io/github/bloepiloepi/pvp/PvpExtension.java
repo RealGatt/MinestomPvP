@@ -4,12 +4,13 @@ import io.github.bloepiloepi.pvp.config.PvPConfig;
 import io.github.bloepiloepi.pvp.enchantment.CustomEnchantments;
 import io.github.bloepiloepi.pvp.entity.CustomPlayer;
 import io.github.bloepiloepi.pvp.entity.Tracker;
+import io.github.bloepiloepi.pvp.listeners.DamageSoundListener;
 import io.github.bloepiloepi.pvp.potion.effect.CustomPotionEffects;
 import io.github.bloepiloepi.pvp.potion.item.CustomPotionTypes;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.attribute.Attribute;
-import net.minestom.server.attribute.AttributeInstance;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.attribute.Attribute;
+import net.minestom.server.entity.attribute.AttributeInstance;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.trait.EntityInstanceEvent;
 import net.minestom.server.item.Material;
@@ -35,8 +36,8 @@ public class PvpExtension {
 	 * @param legacyAttack {@code true} if legacy attack should be enabled
 	 */
 	public static void setLegacyAttack(Player player, boolean legacyAttack) {
-		AttributeInstance speed = player.getAttribute(Attribute.ATTACK_SPEED);
-		AttributeInstance damage = player.getAttribute(Attribute.ATTACK_DAMAGE);
+		AttributeInstance speed = player.getAttribute(Attribute.GENERIC_ATTACK_SPEED);
+		AttributeInstance damage = player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE);
 		if (legacyAttack) {
 			speed.setBaseValue(100);
 			damage.setBaseValue(1.0F);
@@ -56,14 +57,6 @@ public class PvpExtension {
 		
 		Tracker.register(MinecraftServer.getGlobalEventHandler());
 		MinecraftServer.getConnectionManager().setPlayerProvider(CustomPlayer::new);
-		
-		try {
-			Field isFood = Registry.MaterialEntry.class.getDeclaredField("isFood");
-			isFood.setAccessible(true);
-			isFood.set(Material.POTION.registry(), true);
-			isFood.set(Material.MILK_BUCKET.registry(), true);
-		} catch (NoSuchFieldException | IllegalAccessException e) {
-			e.printStackTrace();
-		}
+		new DamageSoundListener();
 	}
 }

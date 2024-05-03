@@ -6,6 +6,7 @@ import io.github.bloepiloepi.pvp.events.PlayerExhaustEvent;
 import io.github.bloepiloepi.pvp.events.PlayerRegenerateEvent;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.item.Material;
 import net.minestom.server.tag.Tag;
@@ -21,11 +22,9 @@ public class HungerManager {
 	}
 	
 	public static void eat(Player player, Material material) {
-		if (material.isFood()) {
-			FoodComponent foodComponent = FoodComponents.fromMaterial(material);
-			assert foodComponent != null;
-			add(player, foodComponent.getHunger(), foodComponent.getSaturationModifier());
-		}
+		FoodComponent foodComponent = FoodComponents.fromMaterial(material);
+		assert foodComponent != null;
+		add(player, foodComponent.getHunger(), foodComponent.getSaturationModifier());
 	}
 	
 	public static void update(Player player, FoodConfig config) {
@@ -48,7 +47,7 @@ public class HungerManager {
 		if (config.isNaturalRegenerationEnabled()) {
 			int starvationTicks = player.getTag(STARVATION_TICKS);
 			if (!config.isLegacy() && player.getFoodSaturation() > 0 && player.getHealth() > 0
-					&& player.getHealth() < player.getMaxHealth() && player.getFood() >= 20) {
+					&& player.getHealth() < player.getAttributeValue(Attribute.GENERIC_MAX_HEALTH) && player.getFood() >= 20) {
 				starvationTicks++;
 				if (starvationTicks >= 10) {
 					float amount = Math.min(player.getFoodSaturation(), 6);
@@ -56,7 +55,7 @@ public class HungerManager {
 					starvationTicks = 0;
 				}
 			} else if (player.getFood() >= 18 && player.getHealth() > 0
-					&& player.getHealth() < player.getMaxHealth()) {
+					&& player.getHealth() <player.getAttributeValue(Attribute.GENERIC_MAX_HEALTH)) {
 				starvationTicks++;
 				if (starvationTicks >= 80) {
 					regenerate(player, 1, config.isLegacy() ? 3 : 6);

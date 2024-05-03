@@ -15,12 +15,13 @@ import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.metadata.arrow.AbstractArrowMeta;
+import net.minestom.server.entity.metadata.projectile.AbstractArrowMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.ChangeGameStatePacket;
 import net.minestom.server.network.packet.server.play.CollectItemPacket;
+import net.minestom.server.network.packet.server.play.HitAnimationPacket;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.NotNull;
@@ -180,6 +181,10 @@ public abstract class AbstractArrow extends CustomEntityProjectile {
 					EffectManager.sendGameState((Player) shooter,
 							ChangeGameStatePacket.Reason.ARROW_HIT_PLAYER, 0.0F);
 				}
+
+				shooter.sendPacketToViewersAndSelf(new HitAnimationPacket(
+						living.getEntityId(), shooter.getPosition().yaw()
+				));
 			}
 			
 			if (!isSilent()) {
@@ -204,13 +209,21 @@ public abstract class AbstractArrow extends CustomEntityProjectile {
 			}
 		}
 	}
-	
+
+	boolean soundPlayed = false;
 	@Override
 	public void onStuck() {
 		if (!isSilent()) {
 			ThreadLocalRandom random = ThreadLocalRandom.current();
-			SoundManager.sendToAround(this, getSound(), Sound.Source.NEUTRAL,
-					1.0F, 1.2F / (random.nextFloat() * 0.2F + 0.9F));
+			if (instance == null) {
+				return;
+			}
+
+			if (!soundPlayed) {
+				SoundManager.sendToAround(instance, position, getSound(), Sound.Source.NEUTRAL,
+						1.0F, 1.2F / (random.nextFloat() * 0.2F + 0.9F));
+				soundPlayed = true;
+			}
 		}
 		
 		pickupDelay = 7;

@@ -30,9 +30,10 @@ import net.minestom.server.event.player.PlayerEatEvent;
 import net.minestom.server.event.player.PlayerPreEatEvent;
 import net.minestom.server.event.player.PlayerUseItemEvent;
 import net.minestom.server.event.trait.EntityInstanceEvent;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.item.metadata.PotionMeta;
+import net.minestom.server.item.component.PotionContents;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.PotionType;
@@ -62,20 +63,20 @@ public class PotionListener {
 			}
 			
 			for (TimedPotion potion : entity.getActiveEffects()) {
-				potionMap.putIfAbsent(potion.getPotion().effect(), potion.getPotion().duration() - 1);
-				int durationLeft = potionMap.get(potion.getPotion().effect());
+				potionMap.putIfAbsent(potion.potion().effect(), potion.potion().duration() - 1);
+				int durationLeft = potionMap.get(potion.potion().effect());
 				
 				if (durationLeft > 0) {
 					if (config.isUpdateEffectEnabled()) {
-						CustomPotionEffect customPotionEffect = CustomPotionEffects.get(potion.getPotion().effect());
-						byte amplifier = potion.getPotion().amplifier();
+						CustomPotionEffect customPotionEffect = CustomPotionEffects.get(potion.potion().effect());
+						byte amplifier = potion.potion().amplifier();
 						
 						if (customPotionEffect.canApplyUpdateEffect(durationLeft, amplifier)) {
 							customPotionEffect.applyUpdateEffect(entity, amplifier, config.isLegacy());
 						}
 					}
 					
-					potionMap.put(potion.getPotion().effect(), durationLeft - 1);
+					potionMap.put(potion.potion().effect(), durationLeft - 1);
 				}
 			}
 			
@@ -138,7 +139,7 @@ public class PotionListener {
 			
 			FoodListener.triggerEatSounds(player, null);
 			
-			List<Potion> potions = getAllPotions(stack.meta(PotionMeta.class), config.isLegacy());
+			List<Potion> potions = getAllPotions(stack.get(ItemComponent.POTION_CONTENTS), config.isLegacy());
 			
 			//Apply the potions
 			for (Potion potion : potions) {
@@ -220,7 +221,7 @@ public class PotionListener {
 			} else {
 				ambient = containsOnlyAmbientEffects(effects);
 				if (particlesEnabled) {
-					color = getPotionColor(effects.stream().map(TimedPotion::getPotion).collect(Collectors.toList()));
+					color = getPotionColor(effects.stream().map(TimedPotion::potion).collect(Collectors.toList()));
 				} else {
 					color = 0;
 				}
@@ -233,7 +234,7 @@ public class PotionListener {
 			LivingEntityMeta meta = (LivingEntityMeta) entity.getEntityMeta();
 			
 			meta.setPotionEffectAmbient(potionVisibilityEvent.isAmbient());
-			meta.setPotionEffectColor(potionVisibilityEvent.getColor());
+			//meta.setPotionEffectColor(potionVisibilityEvent.getColor()); TODO: Find a replacement, couldn't find it while updating to 1.20.5
 			meta.setInvisible(potionVisibilityEvent.isInvisible());
 		});
 	}
@@ -242,7 +243,7 @@ public class PotionListener {
 		if (effects.isEmpty()) return true;
 		
 		for (TimedPotion potion : effects) {
-			if (!potion.getPotion().isAmbient()) {
+			if (!potion.potion().isAmbient()) {
 				return false;
 			}
 		}
@@ -251,11 +252,11 @@ public class PotionListener {
 	}
 	
 	public static int getColor(ItemStack stack, boolean legacy) {
-		PotionMeta meta = stack.meta(PotionMeta.class);
-		if (meta.getColor() != null) {
-			return meta.getColor().asRGB();
+		PotionContents potionContents = stack.get(ItemComponent.POTION_CONTENTS);
+		if (potionContents.customColor() != null) {
+			return potionContents.customColor().asRGB();
 		} else {
-			return meta.getPotionType() == PotionType.EMPTY ? 16253176 : getPotionColor(getAllPotions(meta, legacy));
+			return potionContents.potion() == null ? 16253176 : getPotionColor(getAllPotions(potionContents, legacy));
 		}
 	}
 	
@@ -291,13 +292,13 @@ public class PotionListener {
 		}
 	}
 	
-	public static List<Potion> getAllPotions(PotionMeta meta, boolean legacy) {
-		return getAllPotions(meta.getPotionType(), meta.getCustomPotionEffects(), legacy);
+	public static List<Potion> getAllPotions(PotionContents meta, boolean legacy) {
+		return getAllPotions(meta.potion(), meta.customEffects(), legacy);
 	}
 	
-	public static List<Potion> getAllPotions(PotionType potionType,
-	                                         Collection<net.minestom.server.potion.CustomPotionEffect> customEffects,
-	                                         boolean legacy) {
+	public static List<Potion> getAllPotions(PotionEffect potionType,
+                                             Collection<net.minestom.server.potion.CustomPotionEffect> customEffects,
+                                             boolean legacy) {
 		//PotionType effects plus custom effects
 		List<Potion> potions = new ArrayList<>();
 		
@@ -307,7 +308,7 @@ public class PotionListener {
 		}
 		
 		potions.addAll(customEffects.stream().map((customPotion) ->
-				new Potion(Objects.requireNonNull(PotionEffect.fromId(customPotion.id())),
+				new Potion(Objects.requireNonNull(PotionEffect.fromId(customPotion.id().id())),
 						customPotion.amplifier(), customPotion.duration(),
 						createFlags(
 								customPotion.isAmbient(),

@@ -28,7 +28,7 @@ public class FishingBobber extends CustomEntityProjectile {
 		this.legacy = legacy;
 		setOwnerEntity(shooter);
 		
-		if (legacy) setGravity(getGravityDragPerTick(), 0.04);
+		if (legacy) setAerodynamics(getAerodynamics().withGravity(0.04));
 	}
 	
 	@Override

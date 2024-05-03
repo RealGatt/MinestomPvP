@@ -17,11 +17,11 @@ import io.github.bloepiloepi.pvp.legacy.LegacyKnockbackSettings;
 import io.github.bloepiloepi.pvp.utils.ItemUtils;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.sound.Sound;
-import net.minestom.server.attribute.Attribute;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.*;
+import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.metadata.other.ArmorStandMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.EventListener;
@@ -30,10 +30,10 @@ import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.player.PlayerChangeHeldSlotEvent;
 import net.minestom.server.event.player.PlayerHandAnimationEvent;
 import net.minestom.server.event.trait.EntityInstanceEvent;
-import net.minestom.server.network.packet.server.play.EntityAnimationPacket;
+import net.minestom.server.item.ItemComponent;
+import net.minestom.server.network.packet.server.play.HitAnimationPacket;
 import net.minestom.server.network.packet.server.play.ParticlePacket;
 import net.minestom.server.particle.Particle;
-import net.minestom.server.particle.ParticleCreator;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.tag.Tag;
@@ -69,7 +69,7 @@ public class AttackManager {
 	}
 	
 	public static float getAttackCooldownProgressPerTick(Player player) {
-		return (1 / player.getAttributeValue(Attribute.ATTACK_SPEED)) * 20;
+		return (float) ((1 / player.getAttributeValue(Attribute.GENERIC_ATTACK_SPEED)) * 20);
 	}
 	
 	@SuppressWarnings({"UnstableApiUsage"})
@@ -186,15 +186,9 @@ public class AttackManager {
 					Sound.Source.PLAYER, 1.0f, 1.0f
 			), attacker);
 		}
-		
-		// Play attack effects
-		if (attack.critical()) attacker.sendPacketToViewersAndSelf(new EntityAnimationPacket(
-				target.getEntityId(),
-				EntityAnimationPacket.Animation.CRITICAL_EFFECT
-		));
-		if (attack.magical()) attacker.sendPacketToViewersAndSelf(new EntityAnimationPacket(
-				target.getEntityId(),
-				EntityAnimationPacket.Animation.MAGICAL_CRITICAL_EFFECT
+
+		attacker.sendPacketToViewersAndSelf(new HitAnimationPacket(
+				target.getEntityId(), attacker.getPosition().yaw()
 		));
 		
 		// Thorns
@@ -216,11 +210,11 @@ public class AttackManager {
 			if (config.isDamageIndicatorParticlesEnabled() && damageDone > 2) {
 				int particleCount = (int) (damageDone * 0.5);
 				Pos targetPosition = target.getPosition();
-				ParticlePacket packet = ParticleCreator.createParticlePacket(
+				ParticlePacket packet = new ParticlePacket(
 						Particle.DAMAGE_INDICATOR, false,
 						targetPosition.x(), EntityUtils.getBodyY(target, 0.5), targetPosition.z(),
 						0.1f, 0, 0.1f,
-						0.2F, particleCount, null
+						0.2F, particleCount
 				);
 				target.sendPacketToViewersAndSelf(packet);
 			}
@@ -240,7 +234,7 @@ public class AttackManager {
 	
 	private static @Nullable AttackValues prepareAttack(LivingEntity attacker, Entity target,
 	                                                    AttackConfig config) {
-		float damage = attacker.getAttributeValue(Attribute.ATTACK_DAMAGE);
+		float damage = (float) attacker.getAttributeValue(Attribute.GENERIC_ATTACK_DAMAGE);
 		float enchantedDamage = EnchantmentUtils.getAttackDamage(
 				attacker.getItemInMainHand(),
 				target instanceof LivingEntity living ? EntityGroup.ofEntity(living) : EntityGroup.DEFAULT,
@@ -255,6 +249,8 @@ public class AttackManager {
 		
 		// Apply cooldownProgress to damage
 		damage *= 0.2 + cooldownProgress * cooldownProgress * 0.8;
+		double attackDamage = attacker.getItemInMainHand() == null ? 1 : attacker.getItemInMainHand().get(ItemComponent.ATTRIBUTE_MODIFIERS).modifiers().stream().filter(modifier -> modifier.attribute() == Attribute.GENERIC_ATTACK_DAMAGE).findFirst().orElse(null).modifier().amount() / 5;
+		damage = (float) (damage * attackDamage);
 		enchantedDamage *= cooldownProgress;
 		
 		// Calculate attacks
@@ -310,7 +306,7 @@ public class AttackManager {
 		Pos previousPosition = EntityUtils.getPreviousPosition(attacker);
 		if (previousPosition == null) return false;
 		double lastMoveDistance = previousPosition.distance(attacker.getPosition()) * 0.6;
-		if (lastMoveDistance >= attacker.getAttributeValue(Attribute.MOVEMENT_SPEED)) return false;
+		if (lastMoveDistance >= attacker.getAttributeValue(Attribute.GENERIC_MOVEMENT_SPEED)) return false;
 		
 		Tool tool = Tool.fromMaterial(attacker.getItemInMainHand().material());
 		return tool != null && tool.isSword();
@@ -334,7 +330,7 @@ public class AttackManager {
 				LegacyKnockbackSettings settings = knockbackEvent.getSettings();
 				
 				float kbResistance = target instanceof LivingEntity living ?
-						living.getAttributeValue(Attribute.KNOCKBACK_RESISTANCE) : 0;
+                        (float) living.getAttributeValue(Attribute.GENERIC_KNOCKBACK_RESISTANCE) : 0;
 				double horizontal = settings.extraHorizontal() * (1 - kbResistance) * knockback;
 				double vertical = settings.extraVertical() * (1 - kbResistance) * knockback;
 				
@@ -420,11 +416,11 @@ public class AttackManager {
 		Pos pos = attacker.getPosition();
 		double x = -Math.sin(Math.toRadians(pos.yaw()));
 		double z = Math.cos(Math.toRadians(pos.yaw()));
-		ParticlePacket packet = ParticleCreator.createParticlePacket(
+		ParticlePacket packet = new ParticlePacket(
 				Particle.SWEEP_ATTACK, false,
 				pos.x() + x, EntityUtils.getBodyY(attacker, 0.5), pos.z() + z,
 				(float) x, 0, (float) z,
-				0, 0, null);
+				0, 0);
 		
 		attacker.sendPacketToViewersAndSelf(packet);
 	}

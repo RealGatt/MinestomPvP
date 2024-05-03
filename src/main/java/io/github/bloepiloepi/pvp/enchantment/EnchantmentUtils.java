@@ -6,9 +6,11 @@ import io.github.bloepiloepi.pvp.enums.ArmorMaterial;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.LivingEntity;
-import net.minestom.server.item.Enchantment;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.enchant.Enchantment;
 import net.minestom.server.utils.MathUtils;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -22,7 +24,7 @@ public class EnchantmentUtils {
 	
 	public static short getLevel(Enchantment enchantment, ItemStack stack) {
 		if (stack.isAir()) return 0;
-		Map<Enchantment, Short> enchantmentMap = stack.meta().getEnchantmentMap();
+		@NotNull Map<Enchantment, Integer> enchantmentMap = stack.get(ItemComponent.ENCHANTMENTS).enchantments();
 		if (enchantmentMap.containsKey(enchantment)) return (short) MathUtils.clamp(enchantmentMap.get(enchantment), 0, 255);
 		return 0;
 	}
@@ -66,18 +68,18 @@ public class EnchantmentUtils {
 				possibleStacks.get(ThreadLocalRandom.current().nextInt(possibleStacks.size()));
 	}
 	
-	private static void forEachEnchantment(BiConsumer<CustomEnchantment, Short> consumer, ItemStack stack) {
+	private static void forEachEnchantment(BiConsumer<CustomEnchantment, Integer> consumer, ItemStack stack) {
 		if (!stack.isAir()) {
-			Set<Enchantment> enchantments = stack.meta().getEnchantmentMap().keySet();
+			Set<Enchantment> enchantments = stack.get(ItemComponent.ENCHANTMENTS).enchantments().keySet();
 			
 			for(Enchantment enchantment : enchantments) {
 				CustomEnchantment customEnchantment = CustomEnchantments.get(enchantment);
-				consumer.accept(customEnchantment, stack.meta().getEnchantmentMap().get(enchantment));
+				consumer.accept(customEnchantment, stack.get(ItemComponent.ENCHANTMENTS).enchantments().get(enchantment));
 			}
 		}
 	}
 	
-	public static void forEachEnchantment(BiConsumer<CustomEnchantment, Short> consumer, Iterable<ItemStack> stacks) {
+	public static void forEachEnchantment(BiConsumer<CustomEnchantment, Integer> consumer, Iterable<ItemStack> stacks) {
 		for (ItemStack itemStack : stacks) {
 			forEachEnchantment(consumer, itemStack);
 		}
@@ -136,7 +138,7 @@ public class EnchantmentUtils {
 	}
 	
 	public static short getSweeping(LivingEntity entity) {
-		return getEquipmentLevel(CustomEnchantments.get(Enchantment.SWEEPING), entity);
+		return getEquipmentLevel(CustomEnchantments.get(Enchantment.SWEEPING_EDGE), entity);
 	}
 	
 	public static short getFireAspect(LivingEntity entity) {

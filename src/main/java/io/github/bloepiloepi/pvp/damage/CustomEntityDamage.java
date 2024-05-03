@@ -7,9 +7,12 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 public class CustomEntityDamage extends CustomDamageType {
 	protected final Entity entity;
@@ -42,8 +45,8 @@ public class CustomEntityDamage extends CustomDamageType {
 	public @Nullable Component getDeathMessage(@NotNull Player killed) {
 		ItemStack weapon = entity instanceof LivingEntity ? ((LivingEntity) entity).getItemInMainHand() : ItemStack.AIR;
 		String id = "death.attack." + originDamageType.messageId();
-		if (!weapon.isAir() && weapon.getDisplayName() != null) {
-			return Component.translatable(id + ".item", EntityUtils.getName(killed), EntityUtils.getName(entity), weapon.getDisplayName());
+		if (!weapon.isAir() && weapon.get(ItemComponent.ITEM_NAME) != null) {
+			return Component.translatable(id + ".item", EntityUtils.getName(killed), EntityUtils.getName(entity), Objects.requireNonNull(weapon.get(ItemComponent.ITEM_NAME)));
 		} else {
 			return Component.translatable(id, EntityUtils.getName(killed), EntityUtils.getName(entity));
 		}

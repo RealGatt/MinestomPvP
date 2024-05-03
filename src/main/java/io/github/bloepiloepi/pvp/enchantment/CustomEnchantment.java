@@ -5,8 +5,8 @@ import io.github.bloepiloepi.pvp.entity.EntityGroup;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.LivingEntity;
-import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.enchant.Enchantment;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,11 +37,11 @@ public class CustomEnchantment {
 		return map;
 	}
 	
-	public int getProtectionAmount(short level, CustomDamageType damageType) {
+	public int getProtectionAmount(Integer level, CustomDamageType damageType) {
 		return 0;
 	}
 	
-	public float getAttackDamage(short level, EntityGroup group, boolean legacy) {
+	public float getAttackDamage(Integer level, EntityGroup group, boolean legacy) {
 		return 0.0F;
 	}
 	

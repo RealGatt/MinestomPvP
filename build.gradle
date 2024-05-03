@@ -3,13 +3,12 @@ plugins {
     id 'maven-publish'
 }
 
-sourceCompatibility = 17
+sourceCompatibility = 21
 
 group 'io.github.bloepiloepi'
-version '2.0'
+version '2.1'
 
 repositories {
-    mavenLocal()
     mavenCentral()
     maven { url 'https://jitpack.io' }
 }
@@ -20,9 +19,8 @@ java {
 }
 
 dependencies {
-    implementation 'dev.hollowcube:minestom-ce:gatt'
-    testImplementation 'dev.hollowcube:minestom-ce:gatt'
-    testImplementation 'com.github.TogAr2:MinestomFluids:b237b13a4b'
+    compileOnly 'net.minestom:minestom-snapshots:1_20_5-95c5f6675f'
+    testCompileOnly 'net.minestom:minestom-snapshots:1_20_5-95c5f6675f'
 }
 
 publishing {

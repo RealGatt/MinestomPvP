@@ -11,8 +11,10 @@ import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.network.packet.server.play.HitAnimationPacket;
+import net.minestom.server.network.packet.server.play.ParticlePacket;
 import net.minestom.server.particle.Particle;
-import net.minestom.server.particle.ParticleCreator;
+import net.minestom.server.particle.data.BlockParticleData;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.sound.SoundEvent;
 
@@ -43,13 +45,12 @@ public class FallDamageHandler {
 				double particleMultiplier = Math.min(0.2 + damageDistance / 15.0, 2.5);
 				int particleCount = (int) (150 * particleMultiplier);
 				
-				entity.sendPacketToViewersAndSelf(ParticleCreator.createParticlePacket(
-						Particle.BLOCK,
+				entity.sendPacketToViewersAndSelf(new ParticlePacket(
+						Particle.BLOCK.withData(new BlockParticleData(block)),
 						false,
 						newPosition.x(), newPosition.y(), newPosition.z(),
 						0, 0, 0,
-						0.15f, particleCount,
-						writer -> writer.writeVarInt(block.stateId())
+						0.15f, particleCount
 				));
 			}
 		}
@@ -77,8 +78,12 @@ public class FallDamageHandler {
 							1.0f, 1.0f
 					));
 				}
-				
-				entity.damage(CustomDamageType.FALL.originDamageType, damage);
+				try {
+					entity.damage(CustomDamageType.FALL.originDamageType, damage);
+					entity.sendPacketToViewersAndSelf(new HitAnimationPacket(
+							entity.getEntityId(), entity.getPosition().yaw()
+					));
+				} catch (IllegalArgumentException ignored) {}
 			}
 		} else if (dy < 0) {
 			entity.setTag(Tracker.FALL_DISTANCE, fallDistance - dy);

@@ -11,7 +11,7 @@ import java.util.Map;
 public class CustomPotionTypes {
 	private static final Map<PotionType, CustomPotionType> POTION_EFFECTS = new HashMap<>();
 	
-	public static CustomPotionType get(PotionType potionType) {
+	public static CustomPotionType get(PotionEffect potionType) {
 		return POTION_EFFECTS.get(potionType);
 	}
 	
@@ -23,7 +23,7 @@ public class CustomPotionTypes {
 	
 	public static void registerAll() {
 		register(
-				new CustomPotionType(PotionType.EMPTY),
+				new CustomPotionType(null),
 				new CustomPotionType(PotionType.WATER),
 				new CustomPotionType(PotionType.MUNDANE),
 				new CustomPotionType(PotionType.THICK),

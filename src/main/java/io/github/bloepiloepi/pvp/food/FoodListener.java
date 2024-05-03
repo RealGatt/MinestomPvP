@@ -15,6 +15,7 @@ import net.minestom.server.event.EventNode;
 import net.minestom.server.event.player.*;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.potion.Potion;
@@ -50,7 +51,7 @@ public class FoodListener {
 			}
 			
 			event.setEatingTime((long) getUseTime(foodComponent) * MinecraftServer.TICK_MS);
-		}).filter(event -> event.getItemStack().material().isFood()
+		}).filter(event -> Objects.requireNonNull(event.getItemStack().get(ItemComponent.FOOD)).canAlwaysEat()
 				&& event.getItemStack().material() != Material.POTION)
 				.build());
 		
@@ -92,7 +93,7 @@ public class FoodListener {
 					event.getPlayer().setItemInHand(event.getHand(), stack.withAmount(stack.amount() - 1));
 				}
 			}
-		}).filter(event -> event.getItemStack().material().isFood()
+		}).filter(event -> Objects.requireNonNull(event.getItemStack().get(ItemComponent.FOOD)).canAlwaysEat()
 				&& event.getItemStack().material() != Material.POTION).build()); //May also be a potion
 		
 		node.addListener(PlayerTickEvent.class, event -> {

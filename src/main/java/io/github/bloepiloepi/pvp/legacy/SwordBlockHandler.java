@@ -4,12 +4,13 @@ import io.github.bloepiloepi.pvp.config.PvPConfig;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventListener;
 import net.minestom.server.event.EventNode;
+import net.minestom.server.event.inventory.InventoryClickEvent;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.player.PlayerChangeHeldSlotEvent;
 import net.minestom.server.event.player.PlayerHandAnimationEvent;
-import net.minestom.server.event.player.PlayerSwapItemEvent;
 import net.minestom.server.event.player.PlayerUseItemEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
+import net.minestom.server.inventory.click.Click;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.tag.Tag;
@@ -32,7 +33,7 @@ public class SwordBlockHandler {
 				.handler(SwordBlockHandler::handleUpdateState)
 				.build());
 		
-		node.addListener(EventListener.builder(PlayerSwapItemEvent.class)
+		node.addListener(EventListener.builder(InventoryClickEvent.class)
 				.handler(SwordBlockHandler::handleSwapItem)
 				.build());
 		
@@ -81,10 +82,12 @@ public class SwordBlockHandler {
 		}
 	}
 	
-	private static void handleSwapItem(PlayerSwapItemEvent event) {
-		Player player = event.getPlayer();
-		if (player.getItemInOffHand().material() == Material.SHIELD && player.getTag(BLOCKING_SWORD))
-			event.setCancelled(true);
+	private static void handleSwapItem(InventoryClickEvent event) {
+		if (event.getClickInfo() instanceof Click.Info.OffhandSwap swap) {
+			Player player = event.getPlayer();
+			if (player.getItemInOffHand().material() == Material.SHIELD && player.getTag(BLOCKING_SWORD))
+				event.setCancelled(true);
+		}
 	}
 	
 	private static void handleChangeSlot(PlayerChangeHeldSlotEvent event) {

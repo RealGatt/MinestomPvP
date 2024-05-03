@@ -6,7 +6,7 @@ import io.github.bloepiloepi.pvp.enchantment.CustomEnchantments;
 import io.github.bloepiloepi.pvp.enchantment.EnchantmentUtils;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.LivingEntity;
-import net.minestom.server.item.Enchantment;
+import net.minestom.server.item.enchant.Enchantment;
 
 public class ProtectionEnchantment extends CustomEnchantment {
 	private final Type type;
@@ -17,7 +17,7 @@ public class ProtectionEnchantment extends CustomEnchantment {
 	}
 	
 	@Override
-	public int getProtectionAmount(short level, CustomDamageType damageType) {
+	public int getProtectionAmount(Integer level, CustomDamageType damageType) {
 		if (damageType.isOutOfWorld()) {
 			return 0;
 		} else if (type == Type.ALL) {

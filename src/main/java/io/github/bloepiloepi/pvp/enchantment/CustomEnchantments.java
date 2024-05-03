@@ -5,7 +5,7 @@ import io.github.bloepiloepi.pvp.enchantment.enchantments.ImpalingEnchantment;
 import io.github.bloepiloepi.pvp.enchantment.enchantments.ProtectionEnchantment;
 import io.github.bloepiloepi.pvp.enchantment.enchantments.ThornsEnchantment;
 import net.minestom.server.entity.EquipmentSlot;
-import net.minestom.server.item.Enchantment;
+import net.minestom.server.item.enchant.Enchantment;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,7 +48,7 @@ public class CustomEnchantments {
 				new CustomEnchantment(Enchantment.KNOCKBACK, EquipmentSlot.MAIN_HAND),
 				new CustomEnchantment(Enchantment.FIRE_ASPECT, EquipmentSlot.MAIN_HAND),
 				new CustomEnchantment(Enchantment.LOOTING, EquipmentSlot.MAIN_HAND),
-				new CustomEnchantment(Enchantment.SWEEPING, EquipmentSlot.MAIN_HAND),
+				new CustomEnchantment(Enchantment.SWEEPING_EDGE, EquipmentSlot.MAIN_HAND),
 				new CustomEnchantment(Enchantment.EFFICIENCY, EquipmentSlot.MAIN_HAND),
 				new CustomEnchantment(Enchantment.SILK_TOUCH, EquipmentSlot.MAIN_HAND),
 				new CustomEnchantment(Enchantment.UNBREAKING, EquipmentSlot.MAIN_HAND),

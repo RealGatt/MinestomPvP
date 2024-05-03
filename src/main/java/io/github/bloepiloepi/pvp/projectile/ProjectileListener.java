@@ -30,15 +30,17 @@ import net.minestom.server.event.player.PlayerTickEvent;
 import net.minestom.server.event.player.PlayerUseItemEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.instance.EntityTracker;
-import net.minestom.server.item.Enchantment;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.item.metadata.CrossbowMeta;
+import net.minestom.server.item.enchant.Enchantment;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -193,7 +195,7 @@ public class ProjectileListener {
 		
 		if (config.isCrossbowEnabled()) node.addListener(EventListener.builder(PlayerUseItemEvent.class).handler(event -> {
 			ItemStack stack = event.getItemStack();
-			if (stack.meta(CrossbowMeta.class).isCharged()) {
+			if (!stack.get(ItemComponent.CHARGED_PROJECTILES).isEmpty()) {
 				// Make sure the animation event is not called, because this is not an animation
 				event.setCancelled(true);
 				
@@ -340,7 +342,7 @@ public class ProjectileListener {
 			if (quickCharge < 6) {
 				long useDuration = System.currentTimeMillis() - player.getTag(Tracker.ITEM_USE_START_TIME);
 				double power = getCrossbowPowerForTime(useDuration, stack);
-				if (!(power >= 1.0F) || stack.meta(CrossbowMeta.class).isCharged())
+				if (!(power >= 1.0F) || !stack.get(ItemComponent.CHARGED_PROJECTILES).isEmpty())
 					return;
 			}
 			
@@ -416,7 +418,7 @@ public class ProjectileListener {
 		}).filter(event -> event.getItemStack().material() == Material.TRIDENT).build());
 		
 		if (config.isTridentEnabled()) node.addListener(PlayerTickEvent.class, event -> {
-			if (event.getPlayer().getEntityMeta().isInRiptideSpinAttack()) {
+			if (event.getPlayer().getPlayerMeta().isInRiptideSpinAttack()) {
 				Player player = event.getPlayer();
 				long ticks = player.getAliveTicks() - player.getTag(RIPTIDE_START);
 				AtomicBoolean stopRiptide = new AtomicBoolean(ticks >= 20);
@@ -479,24 +481,25 @@ public class ProjectileListener {
 	}
 	
 	public static ItemStack setCrossbowCharged(ItemStack stack, boolean charged) {
-		return stack.withMeta(CrossbowMeta.class, meta -> meta.charged(charged));
+		return stack.with(ItemComponent.CHARGED_PROJECTILES, Collections.singletonList(ItemStack.of(Material.CROSSBOW)));
 	}
 	
 	public static ItemStack setCrossbowProjectile(ItemStack stack, ItemStack projectile) {
-		return stack.withMeta(CrossbowMeta.class, meta -> meta.projectile(projectile));
+		return stack.with(ItemComponent.CHARGED_PROJECTILES, Collections.singletonList(projectile));
 	}
 	
 	public static ItemStack setCrossbowProjectiles(ItemStack stack, ItemStack projectile1,
 	                                               ItemStack projectile2, ItemStack projectile3) {
-		return stack.withMeta(CrossbowMeta.class, meta -> meta.projectiles(projectile1, projectile2, projectile3));
+		return stack.with(meta -> meta.set(ItemComponent.CHARGED_PROJECTILES, List.of(projectile1, projectile2, projectile3)));
 	}
 	
 	public static boolean crossbowContainsProjectile(ItemStack stack, Material projectile) {
-		CrossbowMeta meta = stack.meta(CrossbowMeta.class);
-		if (meta.getProjectiles().get(0).material() == projectile) return true;
-		if (meta.getProjectiles().size() < 2) return false;
-		if (meta.getProjectiles().get(1).material() == projectile) return true;
-		return meta.getProjectiles().get(2).material() == projectile;
+		if (stack.get(ItemComponent.CHARGED_PROJECTILES).isEmpty()) return false;
+		List<ItemStack> itemStackList = stack.get(ItemComponent.CHARGED_PROJECTILES);
+		if (itemStackList.get(0).material() == projectile) return true;
+		if (itemStackList.size() < 2) return false;
+		if (itemStackList.get(1).material() == projectile) return true;
+		return itemStackList.get(2).material() == projectile;
 	}
 	
 	public static int getCrossbowUseDuration(ItemStack stack) {
@@ -545,23 +548,23 @@ public class ProjectileListener {
 	
 	public static ItemStack performCrossbowShooting(Player player, Player.Hand hand, ItemStack stack,
 	                                           double power, double spread, boolean legacy) {
-		CrossbowMeta meta = stack.meta(CrossbowMeta.class);
-		ItemStack projectile = meta.getProjectiles().get(0);
+		List<ItemStack> projectiles = stack.get(ItemComponent.CHARGED_PROJECTILES);
+		ItemStack projectile = projectiles.get(0);
 		if (!projectile.isAir()) {
 			shootCrossbowProjectile(player, hand, stack, projectile, 1.0F, power, spread, 0.0F, legacy);
 		}
 		
-		if (meta.getProjectiles().size() > 2) {
+		if (projectiles.size() > 2) {
 			ThreadLocalRandom random = ThreadLocalRandom.current();
 			boolean firstHighPitch = random.nextBoolean();
 			float firstPitch = getRandomShotPitch(firstHighPitch, random);
 			float secondPitch = getRandomShotPitch(!firstHighPitch, random);
 			
-			projectile = meta.getProjectiles().get(1);
+			projectile = projectiles.get(1);
 			if (!projectile.isAir()) {
 				shootCrossbowProjectile(player, hand, stack, projectile, firstPitch, power, spread, -10.0F, legacy);
 			}
-			projectile = meta.getProjectiles().get(2);
+			projectile = projectiles.get(2);
 			if (!projectile.isAir()) {
 				shootCrossbowProjectile(player, hand, stack, projectile, secondPitch, power, spread, 10.0F, legacy);
 			}
